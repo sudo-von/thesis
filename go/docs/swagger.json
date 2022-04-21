@@ -1,0 +1,1336 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Official documentation to consume the API.",
+        "title": "College-app API",
+        "contact": {
+            "name": "Jesús 'VoN' Rodríguez",
+            "url": "https://www.linkedin.com/in/jes%C3%BAs-%C3%A1ngel-rodr%C3%ADguez-mart%C3%ADnez-84991a1b4/",
+            "email": "sudo.von.contact@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/advices": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "List advices.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advices"
+                ],
+                "summary": "List advices.",
+                "operationId": "list-advices",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID that will attend to the advice.",
+                        "name": "will_attend",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID that will teach the advice.",
+                        "name": "will_teach",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.AdviceList"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Create advice.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Create advice.",
+                "operationId": "create-advice",
+                "parameters": [
+                    {
+                        "description": "Advice that wants to be stored.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.AdvicePayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/advices/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Get advice given its ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Show advice.",
+                "operationId": "get-advice-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Advice ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.AdviceResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Delete advice given its ID.",
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Delete advice.",
+                "operationId": "delete-advice",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Advice ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Update advice given its ID.",
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Update advice.",
+                "operationId": "update-advice",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Advice ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Advice information that wants to be updated.",
+                        "name": "updatePayload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UpdateAdvicePayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/advices/{id}/students-number": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Update the number of students who will attend the advice.",
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Update advice students number.",
+                "operationId": "update-advice-students-number",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Advice ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "description": "Gets Bearer token.",
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "JWT.",
+                "operationId": "login",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "Access-Control-Allow-Headers": {
+                                "type": "string",
+                                "description": "Authorization."
+                            },
+                            "Authorization": {
+                                "type": "string",
+                                "description": "Bearer jwt that must be used as Api Key in the Authorize section."
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contacts/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Show contact given the user ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Show contact by user ID.",
+                "operationId": "show-contact-by-user-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.ContactResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Create contact for a specific user given its ID.",
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Create contact.",
+                "operationId": "create-contact-by-user-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Contact that wants to be stored.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.ContactPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/contacts/{id}": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Update contact given its ID.",
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Update contact.",
+                "operationId": "update-contact-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contact ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Contact information that wants to be updated.",
+                        "name": "updatePayload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UpdateContactPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/departments": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "List departments.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "departments"
+                ],
+                "summary": "List departments.",
+                "operationId": "list-departments",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.DepartmentList"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Create department.",
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Create department.",
+                "operationId": "create-department",
+                "parameters": [
+                    {
+                        "description": "Department that wants to be stored.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.DepartmentPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/departments/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Get department given its ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Show department.",
+                "operationId": "get-department-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Department ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.DepartmentResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Delete department given its ID.",
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Delete department.",
+                "operationId": "delete-department",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Department ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Update department given its ID.",
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Update department.",
+                "operationId": "update-department",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Department ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Department information that wants to be updated.",
+                        "name": "updatePayload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UpdateDepartmentPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/devices": {
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Store device information.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "devices"
+                ],
+                "summary": "Create device.",
+                "operationId": "create-device-information",
+                "parameters": [
+                    {
+                        "description": "Device that wants to be stored.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.DevicePayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/suggestions": {
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Create suggestion.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "suggestions"
+                ],
+                "summary": "Create suggestion.",
+                "operationId": "create-suggestion",
+                "parameters": [
+                    {
+                        "description": "Suggestion that wants to be stored.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuggestionPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/universities": {
+            "get": {
+                "description": "List basic universities information.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "universities"
+                ],
+                "summary": "List universities.",
+                "operationId": "list-universities",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.TinyUniversityList"
+                        }
+                    }
+                }
+            }
+        },
+        "/universities/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Show basic university information.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "universities"
+                ],
+                "summary": "Show university.",
+                "operationId": "show-university",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "University ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UniversityResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "post": {
+                "description": "Create user.",
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create user.",
+                "operationId": "create-user",
+                "parameters": [
+                    {
+                        "description": "User information that wants to be stored.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UserPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/users-mood/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Get user's mood for the current day given the user ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users-mood"
+                ],
+                "summary": "Show user's mood.",
+                "operationId": "get-user-mood-by-user-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UserMoodResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users-mood/{users}/{id}": {
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Create user's mood for the current day given the user ID.",
+                "tags": [
+                    "users-mood"
+                ],
+                "summary": "Create user's mood.",
+                "operationId": "create-user-mood",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User's mood for the current day.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UserMoodPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Show basic user information.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Show user.",
+                "operationId": "get-tiny-user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.TinyUserResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Update user information.",
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update user.",
+                "operationId": "update-user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User information that wants to be updated.",
+                        "name": "updatePayload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UpdateUserPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "presenter.AdviceList": {
+            "type": "object",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.AdviceResponse"
+                    }
+                },
+                "total": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "presenter.AdvicePayload": {
+            "type": "object",
+            "properties": {
+                "advice_date": {
+                    "type": "string",
+                    "example": "2021-10-24 15:04"
+                },
+                "classroom_id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "subject": {
+                    "type": "string",
+                    "example": "Chemistry"
+                }
+            }
+        },
+        "presenter.AdviceResponse": {
+            "type": "object",
+            "properties": {
+                "advice_date": {
+                    "type": "string",
+                    "example": "2021-10-24 15:04"
+                },
+                "classroom": {
+                    "$ref": "#/definitions/presenter.ClassroomResponse"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "students_will_attend": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "subject": {
+                    "type": "string",
+                    "example": "Chemistry"
+                },
+                "user": {
+                    "$ref": "#/definitions/presenter.TinyUserResponse"
+                }
+            }
+        },
+        "presenter.BasicUser": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "sudo.von.contact@gmail.com"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab4d8a6ef50007e622bd"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Sudo Von"
+                }
+            }
+        },
+        "presenter.ClassroomResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "VoN"
+                }
+            }
+        },
+        "presenter.ContactPayload": {
+            "type": "object",
+            "properties": {
+                "contact_name": {
+                    "type": "string",
+                    "example": "VoN"
+                },
+                "contact_number": {
+                    "type": "string",
+                    "example": "528661234567"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Hi, i need..."
+                }
+            }
+        },
+        "presenter.ContactResponse": {
+            "type": "object",
+            "properties": {
+                "contact_name": {
+                    "type": "string",
+                    "example": "VoN"
+                },
+                "contact_number": {
+                    "type": "string",
+                    "example": "528661234567"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Hi, i need..."
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622bd"
+                }
+            }
+        },
+        "presenter.DepartmentList": {
+            "type": "object",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.DepartmentResponse"
+                    }
+                },
+                "total": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "presenter.DepartmentPayload": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "number",
+                    "example": 1000
+                },
+                "description": {
+                    "type": "string",
+                    "example": "description"
+                },
+                "neighborhood": {
+                    "type": "string",
+                    "example": "neighborhood"
+                },
+                "street": {
+                    "type": "string",
+                    "example": "street"
+                }
+            }
+        },
+        "presenter.DepartmentResponse": {
+            "type": "object",
+            "properties": {
+                "available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "cost": {
+                    "type": "number",
+                    "example": 1000
+                },
+                "description": {
+                    "type": "string",
+                    "example": "description"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "neighborhood": {
+                    "type": "string",
+                    "example": "neighborhood"
+                },
+                "street": {
+                    "type": "string",
+                    "example": "street"
+                },
+                "user": {
+                    "$ref": "#/definitions/presenter.BasicUser"
+                }
+            }
+        },
+        "presenter.DevicePayload": {
+            "type": "object",
+            "properties": {
+                "battery": {
+                    "type": "object",
+                    "properties": {
+                        "battery_level": {
+                            "type": "number",
+                            "example": 70.5
+                        },
+                        "battery_state": {
+                            "type": "string",
+                            "example": "Fake battery state"
+                        },
+                        "low_power_mode": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "device": {
+                    "type": "object",
+                    "properties": {
+                        "brand": {
+                            "type": "string",
+                            "example": "Fake brand"
+                        },
+                        "design_name": {
+                            "type": "string",
+                            "example": "Fake design name"
+                        },
+                        "device_name": {
+                            "type": "string",
+                            "example": "Fake device name"
+                        },
+                        "device_year_class": {
+                            "type": "string",
+                            "example": "Fake device year class"
+                        },
+                        "is_device": {
+                            "type": "boolean"
+                        },
+                        "manufacturer": {
+                            "type": "string",
+                            "example": "Fake manufacturer"
+                        },
+                        "model_id": {
+                            "type": "string",
+                            "example": "Fake model id"
+                        },
+                        "model_name": {
+                            "type": "string",
+                            "example": "Fake model name"
+                        },
+                        "os_build_fingerprint": {
+                            "type": "string",
+                            "example": "Fake os build fingerprint"
+                        },
+                        "os_build_id": {
+                            "type": "string",
+                            "example": "Fake os build id"
+                        },
+                        "os_internal_build_id": {
+                            "type": "string",
+                            "example": "Fake os internal build id"
+                        },
+                        "os_name": {
+                            "type": "string",
+                            "example": "Fake os name"
+                        },
+                        "os_version": {
+                            "type": "string",
+                            "example": "Fake os version"
+                        },
+                        "platform_api_level": {
+                            "type": "string",
+                            "example": "Fake platform api level"
+                        },
+                        "product_name": {
+                            "type": "string",
+                            "example": "Fake product name"
+                        },
+                        "supported_cpu_architectures": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "total_memory": {
+                            "type": "string",
+                            "example": "Fake total memory"
+                        }
+                    }
+                }
+            }
+        },
+        "presenter.SuggestionPayload": {
+            "type": "object",
+            "properties": {
+                "suggestion": {
+                    "type": "string",
+                    "example": "I would like to..."
+                }
+            }
+        },
+        "presenter.TinyUniversityList": {
+            "type": "object",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.TinyUniversityResponse"
+                    }
+                },
+                "total": {
+                    "type": "integer",
+                    "example": 10
+                }
+            }
+        },
+        "presenter.TinyUniversityResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "VoN"
+                },
+                "profile_picture": {
+                    "type": "string",
+                    "example": "Url"
+                }
+            }
+        },
+        "presenter.TinyUserResponse": {
+            "type": "object",
+            "properties": {
+                "birth_date": {
+                    "type": "string",
+                    "example": "1997-04-17"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "sudo.von.contact@gmail.com"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab4d8a6ef50007e622bd"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Sudo Von"
+                },
+                "registration_number": {
+                    "type": "string",
+                    "example": "16190770"
+                }
+            }
+        },
+        "presenter.UniversityResponse": {
+            "type": "object",
+            "properties": {
+                "classrooms": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.ClassroomResponse"
+                    }
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "VoN"
+                },
+                "profile_picture": {
+                    "type": "string",
+                    "example": "Url"
+                }
+            }
+        },
+        "presenter.UpdateAdvicePayload": {
+            "type": "object",
+            "properties": {
+                "advice_date": {
+                    "type": "string",
+                    "example": "1997-04-17 15:04"
+                },
+                "classroom_id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "subject": {
+                    "type": "string",
+                    "example": "Chemistry"
+                }
+            }
+        },
+        "presenter.UpdateContactPayload": {
+            "type": "object",
+            "properties": {
+                "contact_name": {
+                    "type": "string",
+                    "example": "VoN"
+                },
+                "contact_number": {
+                    "type": "string",
+                    "example": "528661234567"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Hi, i need..."
+                }
+            }
+        },
+        "presenter.UpdateDepartmentPayload": {
+            "type": "object",
+            "properties": {
+                "available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "cost": {
+                    "type": "number",
+                    "example": 1000
+                },
+                "description": {
+                    "type": "string",
+                    "example": "description"
+                },
+                "neighborhood": {
+                    "type": "string",
+                    "example": "neighborhood"
+                },
+                "street": {
+                    "type": "string",
+                    "example": "street"
+                }
+            }
+        },
+        "presenter.UpdateUserPayload": {
+            "type": "object",
+            "properties": {
+                "birth_date": {
+                    "type": "string",
+                    "example": "1997-04-17"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "sudo.von.contact@gmail.com"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Sudo Von"
+                },
+                "registration_number": {
+                    "type": "string",
+                    "example": "16190770"
+                }
+            }
+        },
+        "presenter.UserMoodPayload": {
+            "type": "object",
+            "properties": {
+                "mood": {
+                    "type": "number",
+                    "example": 5
+                }
+            }
+        },
+        "presenter.UserMoodResponse": {
+            "type": "object",
+            "properties": {
+                "creation_date": {
+                    "type": "string",
+                    "example": "2021-10-10"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "mood": {
+                    "type": "number",
+                    "example": 10
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "613aab4d8a6ef50007e622bd"
+                }
+            }
+        },
+        "presenter.UserPayload": {
+            "type": "object",
+            "properties": {
+                "birth_date": {
+                    "type": "string",
+                    "example": "1997-04-17"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "sudo.von.contact@gmail.com"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Sudo Von"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "123456"
+                },
+                "registration_number": {
+                    "type": "string",
+                    "example": "16190770"
+                },
+                "university_id": {
+                    "type": "string",
+                    "example": "61366c06d3f6379af212aeb5"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        },
+        "BearerJWT": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
