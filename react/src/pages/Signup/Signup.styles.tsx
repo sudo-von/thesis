@@ -1,13 +1,15 @@
 import { StyleSheet } from 'react-native';
 
-const signupStyles = StyleSheet.create({
+const signupStyles = (color: string) => StyleSheet.create({
   title: {
     fontSize: 26,
   },
   view: {
-    marginVertical: 20,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  text: {
+    color,
   },
 } as const);
 

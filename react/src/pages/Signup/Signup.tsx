@@ -1,31 +1,52 @@
 import React from 'react';
 import SignupForm from 'src/pages/Signup/Components/SignupForm/SignupForm';
-import { SafeAreaView, View, ScrollView } from 'react-native';
+import { Text, ScrollView, TouchableOpacity } from 'react-native';
 import {
-  Container, Small, Center, Bold, Link,
+  Container, Small, Center, Error,
 } from 'src/components';
-import { Title } from 'react-native-paper';
 import useUniversities from 'src/hooks/useUniversities';
+import useUser from 'src/hooks/useUser';
+import { useTheme } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import signupStyles from './Signup.styles';
 
 const Signup = () => {
-  const { loading, error, universities } = useUniversities();
+  const {
+    loading: loadingUniversities,
+    error: errorUniversities,
+    universities,
+  } = useUniversities();
+
+  const {
+    loading: loadingSignup,
+    error: errorSignup,
+    handleSignup,
+  } = useUser();
+
+  const theme = useTheme();
+  const navigation = useNavigation();
+  const styles = signupStyles(theme.colors.primary);
+  const handleNavigation = () => navigation.navigate('Login');
+
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <Container>
-          <View style={signupStyles.view}>
-            <Title style={signupStyles.title}><Bold>¡Bienvenido!</Bold></Title>
-            <Small>Crea tu cuenta completando el formulario.</Small>
-          </View>
-          <SignupForm universities={universities} loading={loading} error={error} />
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <Container>
+        <SignupForm
+          handleSignup={handleSignup}
+          universities={universities}
+          loadingSignup={loadingSignup}
+          loadingUniversities={loadingUniversities}
+        />
+        { errorSignup && <Error message={errorSignup} />}
+        { errorUniversities && <Error message={errorUniversities} />}
+        <TouchableOpacity onPress={handleNavigation}>
           <Center>
             <Small>¿Ya tienes una cuenta?</Small>
-            <Link url="Login">¡Inicia sesión aquí!</Link>
+            <Text style={styles.text}>¡Inicia sesión aquí!</Text>
           </Center>
-        </Container>
-      </ScrollView>
-    </SafeAreaView>
+        </TouchableOpacity>
+      </Container>
+    </ScrollView>
   );
 };
 

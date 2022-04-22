@@ -13,17 +13,16 @@ import {
   Datepicker,
   Option,
   Button,
-  Error,
 } from 'src/components';
-import { useNavigation } from '@react-navigation/native';
-import useUser from 'src/hooks/useUser';
 import { University } from 'src/entities/university';
+import { UserPayload } from 'src/entities/user';
 import signupFormStyles from './SignupForm.styles';
 
 type SignupFormProps = {
   universities: University[],
-  loading: boolean,
-  error: string | null,
+  loadingUniversities: boolean,
+  loadingSignup: boolean,
+  handleSignup: (payload:UserPayload) => Promise<void>,
 };
 
 type SignupFormFields = {
@@ -35,12 +34,12 @@ type SignupFormFields = {
   password?: string,
 };
 
-const SignupForm = ({ universities, loading, error }: SignupFormProps) => {
-  /* TODO: Handle nagivation type. */
-  const navigation = useNavigation();
-  /* TODO: Handle these hooks in a better way. */
-  const { loading: loadingSignup, error: errorSignup, handleSignup } = useUser();
-
+const SignupForm = ({
+  universities,
+  loadingUniversities,
+  loadingSignup,
+  handleSignup,
+}: SignupFormProps) => {
   const initialValues:SignupFormFields = {
     name: 'VoN',
     birthDate: '1997-04-17',
@@ -77,16 +76,27 @@ const SignupForm = ({ universities, loading, error }: SignupFormProps) => {
     return errors;
   };
 
-  /* TODO: Handle this in a better way. */
-  const onSubmit = async (values: SignupFormFields, formik: FormikHelpers<SignupFormFields>) => {
-    await handleSignup(values, { resetForm: formik.resetForm }, navigation);
+  const handleOnSubmit = async (
+    values: SignupFormFields,
+    formik: FormikHelpers<SignupFormFields>,
+  ) => {
+    const payload = {
+      name: values.name ?? '',
+      birthDate: values.birthDate ?? '',
+      email: values.email ?? '',
+      registrationNumber: values.registrationNumber ?? '',
+      universityId: values.universityId ?? '',
+      password: values.password ?? '',
+    };
+    await handleSignup(payload);
+    formik.resetForm();
   };
 
   return (
     <Formik
       initialValues={initialValues}
       validate={handleValidation}
-      onSubmit={onSubmit}
+      onSubmit={handleOnSubmit}
       validateOnChange
       validateOnBlur
     >
@@ -129,7 +139,7 @@ const SignupForm = ({ universities, loading, error }: SignupFormProps) => {
           <Field name="universityId">
             {({ field, form }:FieldAttributes<any>) => (
               <SelectInput
-                label={loading ? 'Cargando universidades...' : 'Selecciona tu universidad'}
+                label={loadingUniversities ? 'Cargando universidades...' : 'Selecciona tu universidad'}
                 data={universities.map(({ id, name, profilePicture }) => ({
                   label: name,
                   value: id,
@@ -141,8 +151,6 @@ const SignupForm = ({ universities, loading, error }: SignupFormProps) => {
               />
             )}
           </Field>
-          { error
-            && <Error message={error} />}
           <PasswordInput
             label="Ingresa tu contraseña"
             onChangeText={handleChange('password')}
@@ -150,8 +158,6 @@ const SignupForm = ({ universities, loading, error }: SignupFormProps) => {
             value={values.password}
             error={errors.password}
           />
-          { errorSignup
-            && <Error message={errorSignup} />}
           <Button
             loading={loadingSignup}
             loadingMessage="Registrando usuario..."

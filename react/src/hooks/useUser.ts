@@ -5,20 +5,26 @@ import { signup } from 'src/services/user.service';
 import { deleteToken } from 'src/services/token.service';
 import { useAuth } from 'src/contexts/auth.context';
 import { AuthActionKind } from 'src/reducers/auth.actions';
+import { UserPayload } from 'src/entities/user';
+import { useNavigation } from '@react-navigation/native';
 
 const useUser = () => {
   const { authState, authDispatch } = useAuth();
   const { user, isLoggedIn } = authState;
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | string>(null);
+  const navigation = useNavigation();
 
-  const handleLogin = useCallback(async ({ email, password }) => {
+  const handleLogin = useCallback(async (
+    { email, password }: { email: string, password: string },
+  ) => {
     try {
       setError(null);
       setLoading(true);
       const response = await login({ email, password });
       setLoading(false);
       authDispatch({ type: AuthActionKind.LOGIN, payload: response.user });
+      navigation.navigate('Login');
     } catch (e) {
       setLoading(false);
       setError((e as Error).message);
@@ -34,15 +40,13 @@ const useUser = () => {
     }
   }, []);
 
-  const handleSignup = useCallback(async (form, { resetForm }, navigation) => {
+  const handleSignup = useCallback(async (payload: UserPayload) => {
     try {
       setError(null);
       setLoading(true);
-      await signup(form);
+      await signup(payload);
       setLoading(false);
-      resetForm();
       Alert.alert('¡Felicidades!', 'Ya puedes iniciar sesión.');
-      navigation.navigate('Login');
     } catch (e) {
       setError((e as Error).message);
       setLoading(false);
@@ -53,6 +57,7 @@ const useUser = () => {
     user,
     loading,
     error,
+    setError,
     isLoggedIn,
     handleLogin,
     handleLogout,

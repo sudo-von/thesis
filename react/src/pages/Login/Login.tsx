@@ -1,29 +1,40 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text, useTheme } from 'react-native-paper';
 import {
-  Container, Logo, Header, Link, Small, Center,
+  Container, Logo, Small, Center, Error,
 } from 'src/components';
+import useUser from 'src/hooks/useUser';
 import LoginForm from 'src/pages/Login/Components/LoginForm/LoginForm';
+import loginStyles from './Login.styles';
 
-const logo = require('assets/kyoto-university-logo.png');
+const logo = require('assets/logo/logo.png');
 
-const Login = ():JSX.Element => (
-  <Container style={{ justifyContent: 'center' }}>
-    <Center>
-      <Logo
-        source={logo}
-        size={150}
+const Login = ():JSX.Element => {
+  const { loading, error, handleLogin } = useUser();
+  const theme = useTheme();
+  const navigation = useNavigation();
+  const handleNavigation = () => navigation.navigate('Signup');
+  const styles = loginStyles(theme.colors.primary);
+  return (
+    <Container>
+      <Center>
+        <Logo source={logo} size={150} />
+      </Center>
+      <LoginForm
+        loading={loading}
+        handleLogin={handleLogin}
       />
-      <Header
-        title="Universidad Autónoma de Kyoto"
-        subtitle='"Siempre parece imposible, hasta que se hace".'
-      />
-    </Center>
-    <LoginForm />
-    <Center>
-      <Small>¿No tienes una cuenta?</Small>
-      <Link url="Signup">¡Regístrate aquí!</Link>
-    </Center>
-  </Container>
-);
+      { error && <Error message={error} /> }
+      <TouchableOpacity onPress={handleNavigation}>
+        <Center>
+          <Small>¿No tienes una cuenta?</Small>
+          <Text style={styles.text}>¡Regístrate aquí!</Text>
+        </Center>
+      </TouchableOpacity>
+    </Container>
+  );
+};
 
 export default Login;

@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const loginFormStyles = StyleSheet.create({
   container: {
-    marginVertical: 30,
+    marginVertical: 40,
   },
   button: {
     marginTop: 40,

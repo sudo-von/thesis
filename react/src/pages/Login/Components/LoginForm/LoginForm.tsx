@@ -1,20 +1,22 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Formik } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 import {
-  Button, Error, Input, PasswordInput,
+  Button, Input, PasswordInput,
 } from 'src/components';
-import useUser from 'src/hooks/useUser';
 import loginFormStyles from './LoginForm.styles';
+
+type LoginFormProps = {
+  loading: boolean,
+  handleLogin: ({ email, password }: { email: string, password: string }) => Promise<void>,
+};
 
 export type LoginFormFields = {
   email?: string,
   password?: string,
 };
 
-const LoginForm = () => {
-  const { loading, error, handleLogin } = useUser();
-
+const LoginForm = ({ loading, handleLogin }: LoginFormProps) => {
   const initialValues:LoginFormFields = {
     email: 'martinez-angel@uadec.edu.mx',
     password: 'college-app',
@@ -31,11 +33,23 @@ const LoginForm = () => {
     return errors;
   };
 
+  const handleOnSubmit = (
+    values: LoginFormFields,
+    formikHelpers: FormikHelpers<LoginFormFields>,
+  ): void => {
+    const payload = {
+      email: values.email ?? '',
+      password: values.password ?? '',
+    };
+    handleLogin(payload);
+    formikHelpers.resetForm();
+  };
+
   return (
     <Formik
       initialValues={initialValues}
       validate={handleValidation}
-      onSubmit={handleLogin}
+      onSubmit={handleOnSubmit}
       validateOnChange
       validateOnBlur
     >
@@ -57,8 +71,6 @@ const LoginForm = () => {
             value={values.password}
             error={errors.password}
           />
-          { error
-            && <Error message={error} />}
           <Button
             loading={loading}
             loadingMessage="Iniciando sesión"
