@@ -48,7 +48,7 @@ export type DrawerParamList = {
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
-const Router = () => {
+const Router = (): JSX.Element => {
   const { isLoggedIn } = useUser();
   const { colors } = useTheme();
   const styles = routerStyles(colors);
