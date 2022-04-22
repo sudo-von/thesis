@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Image, ImageSourcePropType } from 'react-native';
-import { useTheme } from 'react-native-paper';
-import logoStyles from './Logo.styles';
+import { Image, ImageSourcePropType } from 'react-native';
+import imageStyles from './Logo.styles';
 
 type LogoProps = {
   source: ImageSourcePropType,
@@ -9,14 +8,12 @@ type LogoProps = {
 };
 
 const Logo = ({ source, size = 180 }: LogoProps): JSX.Element => {
-  const { colors } = useTheme();
+  const styles = imageStyles(size);
   return (
-    <View style={logoStyles({ size, colors }).view}>
-      <Image
-        style={logoStyles({ size, colors }).image}
-        source={source}
-      />
-    </View>
+    <Image
+      style={styles.image}
+      source={source}
+    />
   );
 };
 

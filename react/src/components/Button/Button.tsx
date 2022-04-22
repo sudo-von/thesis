@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button as PaperButton, useTheme } from 'react-native-paper';
-import styles from './Button.styles';
+import buttonStyles from './Button.styles';
 
 type ButtonProps = {
   loading: boolean,
@@ -13,10 +13,11 @@ type ButtonProps = {
 const Button = ({
   loading, loadingMessage, children, style, onPress,
 } : ButtonProps): JSX.Element => {
-  const { colors }: ReactNativePaper.Theme = useTheme();
+  const theme = useTheme();
+  const styles = buttonStyles(theme.colors.primary);
   return (
     <PaperButton
-      style={{ ...styles(colors).button, ...style }}
+      contentStyle={{ ...styles.button, ...style }}
       loading={loading}
       color="white"
       disabled={loading}

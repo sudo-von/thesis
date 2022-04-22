@@ -1,13 +1,14 @@
 import { StyleSheet } from 'react-native';
 
-const styles = ({ primary }: ReactNativePaper.ThemeColors) => StyleSheet.create({
+const buttonStyles = (backgroundColor: string) => StyleSheet.create({
   button: {
-    backgroundColor: primary,
+    backgroundColor,
     borderRadius: 50,
+    paddingVertical: 6,
   },
   label: {
     color: 'white',
   },
 } as const);
 
-export default styles;
+export default buttonStyles;
