@@ -1,20 +1,22 @@
 import { StyleSheet } from 'react-native';
 
-const errorStyles = StyleSheet.create({
-  container: {
-    marginVertical: 10,
+const errorStyles = (color: string) => StyleSheet.create({
+  content: {
+    paddingBottom: 0,
+  },
+  view: {
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#D3242B',
-    borderRadius: 50,
-    padding: 5,
-    overflow: 'scroll',
   },
-  text: {
-    flexShrink: 1,
-    color: 'white',
-    textAlign: 'center',
+  title: {
+    marginLeft: 5,
+    fontSize: 16,
+    color,
+  },
+  message: {
+    marginTop: 15,
   },
 } as const);
 
