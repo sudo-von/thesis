@@ -6,9 +6,10 @@ const theme: Theme = {
   colors: {
     ...DefaultTheme.colors,
     background: '#FFFFFF',
-    primary: '#3e4c8e',
+    primary: '#1E319D',
     accent: '#BAB2B5',
-    placeholder: '#7D8286',
+    placeholder: '#2539aa',
+    error: '#DB1304',
   },
 };
 
