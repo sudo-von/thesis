@@ -2,7 +2,7 @@ version: '3.1'
 services:
   database:
     container_name: dev_college_app_database
-    image: mongo:3.4.2
+    image: mongo:3.6
     restart: always
     volumes:
       - ./mongo/volume:/data/db
@@ -42,3 +42,14 @@ services:
       - database
     ports:
       - 4000:4000
+  populate:
+    container_name: dev_college_app_populate
+    build:
+      context: populate/.
+    environment:
+      MONGO_URL: ${MONGO_URL}
+      MONGO_DATABASE: ${MONGO_DATABASE}
+      MONGO_USERNAME: ${MONGO_USERNAME}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY}
+      ENVIRONMENT: ${ENVIRONMENT}
