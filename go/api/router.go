@@ -22,7 +22,7 @@ type Services struct {
 	DepartmentService handler.DepartmentService
 	UserMoodService   handler.UserMoodService
 	AdviceService     handler.AdviceService
-	DeviceService     handler.DeviceService
+	BatteryService    handler.BatteryService
 	TokenService      handler.TokenService
 }
 
@@ -69,7 +69,7 @@ func ListenAndServe(services Services) {
 	userController := handler.NewUserController(services.UserService, jwtController.IsAuthorized())
 	userMoodController := handler.NewUserMoodController(services.UserMoodService, jwtController.IsAuthorized())
 	universityController := handler.NewUniversityController(services.UniversityService, jwtController.IsAuthorized())
-	deviceController := handler.NewDeviceController(services.DeviceService, jwtController.IsAuthorized())
+	batteryController := handler.NewBatteryController(services.BatteryService, jwtController.IsAuthorized())
 
 	// Documentation.
 	r.Mount("/swagger", httpSwagger.WrapHandler)
@@ -78,7 +78,7 @@ func ListenAndServe(services Services) {
 	r.Mount("/advices", adviceController.Routes())
 	r.Mount("/contacts", contactController.Routes())
 	r.Mount("/departments", departmentController.Routes())
-	r.Mount("/devices", deviceController.Routes())
+	r.Mount("/batteries", batteryController.Routes())
 	r.Mount("/suggestions", suggestionController.Routes())
 	r.Mount("/users", userController.Routes())
 	r.Mount("/users-mood", userMoodController.Routes())

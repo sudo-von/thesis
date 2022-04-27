@@ -6,9 +6,9 @@ import (
 	"freelancer/college-app/go/infrastructure/repository/mongo"
 	"freelancer/college-app/go/pkg/token"
 	"freelancer/college-app/go/usecase/advice"
+	"freelancer/college-app/go/usecase/battery"
 	"freelancer/college-app/go/usecase/contact"
 	"freelancer/college-app/go/usecase/department"
-	"freelancer/college-app/go/usecase/device"
 	"freelancer/college-app/go/usecase/suggestion"
 	"freelancer/college-app/go/usecase/university"
 	"freelancer/college-app/go/usecase/user"
@@ -41,7 +41,7 @@ func main() {
 	departmentRepository := mongo.NewDepartmentRepository(db)
 	userMoodRepository := mongo.NewUserMoodRepository(db)
 	adviceRepository := mongo.NewAdviceRepository(db)
-	deviceRepository := mongo.NewDeviceRepository(db)
+	batteryRepository := mongo.NewBatteryRepository(db)
 
 	// Services.
 	userService := user.NewService(userRepository, universityRepository)
@@ -51,7 +51,7 @@ func main() {
 	departmentService := department.NewService(departmentRepository, userRepository)
 	userMoodService := user_mood.NewService(userRepository, userMoodRepository)
 	adviceService := advice.NewService(adviceRepository, userRepository, universityRepository)
-	deviceService := device.NewService(deviceRepository, userRepository)
+	batteryService := battery.NewService(batteryRepository, userRepository)
 
 	services := api.Services{
 		UserService:       *userService,
@@ -61,7 +61,7 @@ func main() {
 		UserMoodService:   *userMoodService,
 		AdviceService:     *adviceService,
 		DepartmentService: *departmentService,
-		DeviceService:     *deviceService,
+		BatteryService:    *batteryService,
 		TokenService:      tokenService,
 	}
 
