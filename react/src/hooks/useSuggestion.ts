@@ -1,18 +1,19 @@
 import { useCallback, useState } from 'react';
-import { Alert } from 'react-native';
+import { SuggestionPayload } from 'src/entities/suggestion';
 import sendSuggestion from 'src/services/suggestion.service';
 
 const useSuggestion = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  const handleSuggestion = useCallback(async (form, { resetForm }) => {
+  const handleSuggestion = useCallback(async (suggestion:SuggestionPayload): Promise<void> => {
     try {
       setError(null);
+      setSuccess(null);
       setLoading(true);
-      await sendSuggestion(form);
-      Alert.alert('¡Felicidades!', '¡Has enviado tu sugerencia con éxito!');
-      resetForm();
+      await sendSuggestion(suggestion);
+      setSuccess('¡Has enviado tu sugerencia con éxito!');
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -21,8 +22,10 @@ const useSuggestion = () => {
   }, []);
 
   return {
-    loading,
     error,
+    loading,
+    setError,
+    success,
     handleSuggestion,
   };
 };

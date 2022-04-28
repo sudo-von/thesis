@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 const useUser = () => {
   const { authState, authDispatch } = useAuth();
   const { user, isLoggedIn } = authState;
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | string>(null);
   const navigation = useNavigation();
 
