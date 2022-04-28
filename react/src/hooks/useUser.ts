@@ -24,7 +24,7 @@ const useUser = () => {
       const response = await login({ email, password });
       setLoading(false);
       authDispatch({ type: AuthActionKind.LOGIN, payload: response.user });
-      navigation.navigate('Login');
+      navigation.navigate('Home');
     } catch (e) {
       setLoading(false);
       setError((e as Error).message);

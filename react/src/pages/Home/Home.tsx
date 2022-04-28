@@ -65,9 +65,10 @@ const Home = () => {
         </Title>
         <Small style={homeStyles.small}>Mantente al día con las últimas{'\n'}noticias visitando la página de tu escuela.</Small>
       </View>
-      <ScrollView>
+      <ScrollView contentContainerStyle={homeStyles.scrollView}>
         {navigationCards.map((navigationCard) => (
           <NavigationCard
+            key={`${navigationCard.title}`}
             icon={navigationCard.icon}
             color={navigationCard.color}
             backgroundColor={navigationCard.backgroundColor}

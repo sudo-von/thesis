@@ -12,6 +12,9 @@ const homeStyles = StyleSheet.create({
   small: {
     textAlign: 'center',
   },
+  scrollView: {
+    paddingHorizontal: 5,
+  },
   image: {
     width: 150,
     height: 150,
