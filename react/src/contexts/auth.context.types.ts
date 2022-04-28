@@ -9,6 +9,7 @@ export type Token = {
 export type User = {
   userId: string,
   userName: string,
+  email: string,
   universityId: string,
   universityName: string,
   universityProfilePicture: string,

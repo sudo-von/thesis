@@ -6,6 +6,7 @@ const initialAuthState:AuthContextState = {
   user: {
     userId: '',
     userName: '',
+    email: '',
     universityId: '',
     universityName: '',
     universityProfilePicture: '',

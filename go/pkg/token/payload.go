@@ -17,17 +17,12 @@ type Payload struct {
 	ID                       uuid.UUID `json:"id"`
 	UserID                   string    `json:"user_id"`
 	UserName                 string    `json:"user_name"`
+	Email                    string    `json:"email"`
 	UniversityID             string    `json:"university_id"`
 	UniversityName           string    `json:"university_name"`
 	UniversityProfilePicture string    `json:"university_profile_picture"`
 	IssuedAt                 time.Time `json:"issued_at"`
 	ExpiredAt                time.Time `json:"expired_at"`
-}
-
-type UniversityPayload struct {
-	ID             string `json:"id"`
-	Name           string `json:"name"`
-	ProfilePicture string `json:"profile_picture"`
 }
 
 func NewPayload(user *entity.User, duration time.Duration) (*Payload, error) {
@@ -39,6 +34,7 @@ func NewPayload(user *entity.User, duration time.Duration) (*Payload, error) {
 		ID:                       id,
 		UserID:                   user.ID,
 		UserName:                 user.Name,
+		Email:                    user.Email,
 		UniversityID:             user.University.ID,
 		UniversityName:           user.University.Name,
 		UniversityProfilePicture: user.University.ProfilePicture,

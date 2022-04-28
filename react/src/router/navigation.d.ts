@@ -1,4 +1,4 @@
-import { DrawerParamList } from './router';
+import { DrawerParamList } from 'src/router/Router';
 
 declare global {
   namespace ReactNavigation {

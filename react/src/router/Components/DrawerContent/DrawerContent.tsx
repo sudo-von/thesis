@@ -2,23 +2,25 @@
 import React from 'react';
 import { View, Image } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import { Header } from 'src/components';
 import useUser from 'src/hooks/useUser';
+import { Divider, Title } from 'react-native-paper';
+import { Small } from 'src/components';
 import drawerContentStyles from './DrawerContent.styles';
 
 const DrawerContent = (props:any) => {
   const { user } = useUser();
-  const { universityName, universityProfilePicture } = user;
+  const { email, universityProfilePicture, userName } = user;
   return (
     <DrawerContentScrollView {...props}>
-      <View style={drawerContentStyles.drawerContent}>
+      <View>
         <View style={drawerContentStyles.imageContainer}>
-          <Image style={drawerContentStyles.image} source={{ uri: universityProfilePicture }} />
+          <View>
+            <Image style={drawerContentStyles.image} source={{ uri: universityProfilePicture }} />
+            <Title style={drawerContentStyles.title}>{userName}</Title>
+            <Small>{email}</Small>
+          </View>
         </View>
-        <Header
-          title={universityName}
-          subtitle="Universidad Autónoma de Kyoto"
-        />
+        <Divider style={drawerContentStyles.divider} />
       </View>
       <DrawerItemList {...props} />
     </DrawerContentScrollView>

@@ -19,6 +19,7 @@ import UpdateAccount from 'src/pages/UpdateAccount/UpdateAccount';
 import CreateContact from 'src/pages/CreateContact/CreateContact';
 import UpdateContact from 'src/pages/UpdateContact/UpdateContact';
 import DrawerContent from 'src/router/Components/DrawerContent/DrawerContent';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import privateRouterStyles from './PrivateRouter.styles';
 
 const routes: Route[] = [
@@ -27,6 +28,9 @@ const routes: Route[] = [
     component: Home,
     options: {
       title: 'Inicio',
+      drawerIcon: ({ color }: { color: string }) => (
+        <Ionicons name="home-outline" size={20} color={color} />
+      ),
     },
   },
   {
@@ -34,6 +38,9 @@ const routes: Route[] = [
     component: Configuration,
     options: {
       title: 'Configuración',
+      drawerIcon: ({ color }: { color: string }) => (
+        <Ionicons name="settings-outline" size={20} color={color} />
+      ),
     },
   },
   {
@@ -41,6 +48,11 @@ const routes: Route[] = [
     component: Logout,
     options: {
       title: 'Cerrar sesión',
+      headerShown: false,
+      swipeEnabled: false,
+      drawerIcon: ({ color }: { color: string }) => (
+        <MaterialIcons name="logout" size={20} color={color} />
+      ),
     },
   },
   {

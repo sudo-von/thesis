@@ -1,3 +1,4 @@
+import { parse } from '@babel/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Base64 } from 'js-base64';
 import { Token, User } from 'src/contexts/auth.context.types';
@@ -35,6 +36,7 @@ const decodeToken = async (): Promise<DecodedToken> => {
     user: {
       userId: parsedUser.user_id,
       userName: parsedUser.user_name,
+      email: parsedUser.email,
       universityId: parsedUser.university_id,
       universityName: parsedUser.university_name,
       universityProfilePicture: parsedUser.university_profile_picture,
