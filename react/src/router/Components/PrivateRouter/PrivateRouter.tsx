@@ -20,6 +20,7 @@ import CreateContact from 'src/pages/CreateContact/CreateContact';
 import UpdateContact from 'src/pages/UpdateContact/UpdateContact';
 import DrawerContent from 'src/router/Components/DrawerContent/DrawerContent';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import BackButton from 'src/router/Components/BackButton/BackButton';
 import privateRouterStyles from './PrivateRouter.styles';
 
 const routes: Route[] = [
@@ -63,6 +64,7 @@ const routes: Route[] = [
       drawerItemStyle: {
         height: 0,
       },
+      headerLeft: BackButton,
     },
   },
   {
@@ -73,6 +75,7 @@ const routes: Route[] = [
       drawerItemStyle: {
         height: 0,
       },
+      headerLeft: BackButton,
     },
   },
   {
@@ -83,6 +86,7 @@ const routes: Route[] = [
       drawerItemStyle: {
         height: 0,
       },
+      headerLeft: BackButton,
     },
   },
   {
@@ -93,6 +97,7 @@ const routes: Route[] = [
       drawerItemStyle: {
         height: 0,
       },
+      headerLeft: BackButton,
     },
   },
   {
@@ -103,6 +108,7 @@ const routes: Route[] = [
       drawerItemStyle: {
         height: 0,
       },
+      headerLeft: BackButton,
     },
   },
   {
@@ -113,6 +119,7 @@ const routes: Route[] = [
       drawerItemStyle: {
         height: 0,
       },
+      headerLeft: BackButton,
     },
   },
   {
@@ -123,6 +130,7 @@ const routes: Route[] = [
       drawerItemStyle: {
         height: 0,
       },
+      headerLeft: BackButton,
     },
   },
   {
@@ -133,6 +141,7 @@ const routes: Route[] = [
       drawerItemStyle: {
         height: 0,
       },
+      headerLeft: BackButton,
     },
   },
   {
@@ -143,6 +152,7 @@ const routes: Route[] = [
       drawerItemStyle: {
         height: 0,
       },
+      headerLeft: BackButton,
     },
   },
   {
@@ -153,6 +163,7 @@ const routes: Route[] = [
       drawerItemStyle: {
         height: 0,
       },
+      headerLeft: BackButton,
     },
   },
   {
@@ -163,6 +174,7 @@ const routes: Route[] = [
       drawerItemStyle: {
         height: 0,
       },
+      headerLeft: BackButton,
     },
   },
 ];
@@ -173,8 +185,7 @@ const PrivateRouter = (): JSX.Element => {
   const { colors } = useTheme();
   const styles = privateRouterStyles(colors);
   return (
-
-    <Drawer.Navigator screenOptions={styles} initialRouteName="Home" drawerContent={(props) => <DrawerContent {...props} />}>
+    <Drawer.Navigator screenOptions={styles} backBehavior="history" initialRouteName="Home" drawerContent={(props) => <DrawerContent {...props} />}>
       {
         routes.map((route) => (
           <Drawer.Screen

@@ -36,14 +36,14 @@ export type Route = {
 const Router = (): JSX.Element => {
   const { isLoggedIn } = useUser();
 
-  if (!isLoggedIn) {
+  if (isLoggedIn) {
     return (
-      <PublicRouter />
+      <PrivateRouter />
     );
   }
 
   return (
-    <PrivateRouter />
+    <PublicRouter />
   );
 };
 

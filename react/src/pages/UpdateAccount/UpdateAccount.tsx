@@ -10,7 +10,7 @@ import { TinyUser } from 'src/entities/user';
 import updateAccountStyles from './UpdateAccount.styles';
 import UpdateAccountForm from './Components/UpdateAccountForm/UpdateAccountForm';
 
-const UpdateAccountConfigurationPage = () => {
+const UpdateAccount = () => {
   const { user } = useUser();
   const { userId } = user;
   const [account, setAccount] = useState<TinyUser>();
@@ -43,4 +43,4 @@ const UpdateAccountConfigurationPage = () => {
   );
 };
 
-export default UpdateAccountConfigurationPage;
+export default UpdateAccount;
