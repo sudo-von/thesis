@@ -7,9 +7,10 @@ const theme: Theme = {
     ...DefaultTheme.colors,
     background: '#FFFFFF',
     primary: '#1E319D',
-    accent: '#BAB2B5',
+    accent: '#888888',
     placeholder: '#2539aa',
     error: '#DB1304',
+    disabled: '#cccccc',
   },
 };
 

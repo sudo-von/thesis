@@ -1,6 +1,6 @@
 import { NavigationContainerRef } from '@react-navigation/native';
 import { createRef } from 'react';
-import { DrawerParamList } from 'src/router/router';
+import { DrawerParamList } from 'src/router/Router';
 
 const navigationRef = createRef<NavigationContainerRef<DrawerParamList>>();
 

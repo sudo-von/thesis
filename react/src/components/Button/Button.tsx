@@ -14,12 +14,14 @@ const Button = ({
   loading, loadingMessage, children, style, onPress,
 } : ButtonProps): JSX.Element => {
   const theme = useTheme();
-  const styles = buttonStyles(theme.colors.primary);
+  const backgroundColor = loading ? theme.colors.disabled : theme.colors.primary;
+  const color = loading ? theme.colors.accent : theme.colors.background;
+  const styles = buttonStyles(backgroundColor, color);
   return (
     <PaperButton
       contentStyle={{ ...styles.button, ...style }}
+      labelStyle={styles.label}
       loading={loading}
-      color="white"
       disabled={loading}
       onPress={onPress}
     >
