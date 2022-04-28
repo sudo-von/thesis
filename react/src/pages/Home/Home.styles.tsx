@@ -3,22 +3,21 @@ import { StyleSheet } from 'react-native';
 const homeStyles = StyleSheet.create({
   view: {
     marginVertical: 40,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 24,
   },
-  small: {
-    textAlign: 'center',
+  image: {
+    height: 130,
+    width: 130,
+    borderRadius: 5,
+    resizeMode: 'contain',
   },
   scrollView: {
     paddingHorizontal: 5,
-  },
-  image: {
-    width: 150,
-    height: 150,
-    resizeMode: 'contain',
   },
 } as const);
 

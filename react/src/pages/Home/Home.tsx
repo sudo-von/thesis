@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import {
   Container, Small, Bold,
 } from 'src/components';
@@ -8,6 +8,7 @@ import { Title } from 'react-native-paper';
 import Mood from 'src/pages/Home/Components/Mood/Mood';
 import NavigationCard, { NavigationCardProps } from 'src/components/NavigationCard/NavigationCard';
 import { ScrollView } from 'react-native-gesture-handler';
+import { getFirstName } from 'src/helpers/user-helper';
 import homeStyles from './Home.styles';
 
 const navigationCards: NavigationCardProps[] = [
@@ -40,15 +41,17 @@ const navigationCards: NavigationCardProps[] = [
     color: '#ffda59',
     backgroundColor: '#f9f9e6',
     title: 'Sugerencias',
-    description: 'Envíanos una sugerencia para mejorar.',
+    description: 'Envíanos una sugerencia.',
     url: 'CreateSuggestion',
   },
 ];
 
+const welcomeImage = require('assets/figma/welcome.png');
+
 const Home = () => {
   const { user } = useUser();
   const { userName, userId } = user;
-  const name = userName.split(' ').shift();
+  const firstName = getFirstName(userName);
   return (
     <Container>
       <Mood
@@ -60,10 +63,16 @@ const Home = () => {
         userId={userId}
       />
       <View style={homeStyles.view}>
-        <Title style={homeStyles.title}>
-          <Bold>¡Hola {name}!</Bold>
-        </Title>
-        <Small style={homeStyles.small}>Mantente al día con las últimas{'\n'}noticias visitando la página de tu escuela.</Small>
+        <Image
+          source={welcomeImage}
+          style={homeStyles.image}
+        />
+        <View>
+          <Title style={homeStyles.title}>
+            <Bold>¡Hola {firstName}!</Bold>
+          </Title>
+          <Small>Estamos muy emocionados{'\n'}de tenerte por aquí!</Small>
+        </View>
       </View>
       <ScrollView contentContainerStyle={homeStyles.scrollView}>
         {navigationCards.map((navigationCard) => (
