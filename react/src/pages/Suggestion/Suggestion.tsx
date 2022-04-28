@@ -31,7 +31,7 @@ const Suggestion = ():JSX.Element => {
   };
 
   return (
-    <Container style={{ justifyContent: 'flex-start' }}>
+    <Container style={suggestionStyles.container}>
       <View style={suggestionStyles.view}>
         <Title><Bold>Tu opinión es muy{'\n'}importante para nosotros!</Bold></Title>
         <Small>¡Realiza una sugerencia para mejorar la aplicación! </Small>

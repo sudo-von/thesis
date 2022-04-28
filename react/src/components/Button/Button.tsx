@@ -24,6 +24,7 @@ const Button = ({
       loading={loading}
       disabled={loading}
       onPress={onPress}
+      mode="text"
     >
       {loading ? loadingMessage : children}
     </PaperButton>
