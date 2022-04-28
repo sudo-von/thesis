@@ -1,0 +1,180 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/no-unstable-nested-components */
+import React from 'react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useTheme } from 'react-native-paper';
+import { DrawerParamList, Route } from 'src/router/Router';
+import Logout from 'src/pages/Logout/Logout';
+import Home from 'src/pages/Home/Home';
+import PanicButton from 'src/pages/PanicButton/PanicButton';
+import Advices from 'src/pages/Advices/Advices';
+import Departments from 'src/pages/Departments/Departments';
+import CreateDepartment from 'src/pages/CreateDepartment/CreateDepartment';
+import UpdateDepartment from 'src/pages/UpdateDepartment/UpdateDepartment';
+import CreateAdvice from 'src/pages/CreateAdvice/CreateAdvice';
+import UpdateAdvice from 'src/pages/UpdateAdvice/UpdateAdvice';
+import Suggestion from 'src/pages/Suggestion/Suggestion';
+import Configuration from 'src/pages/Configuration/Configuration';
+import UpdateAccount from 'src/pages/UpdateAccount/UpdateAccount';
+import CreateContact from 'src/pages/CreateContact/CreateContact';
+import UpdateContact from 'src/pages/UpdateContact/UpdateContact';
+import DrawerContent from 'src/router/Components/DrawerContent/DrawerContent';
+import privateRouterStyles from './PrivateRouter.styles';
+
+const routes: Route[] = [
+  {
+    name: 'Home',
+    component: Home,
+    options: {
+      title: 'Inicio',
+    },
+  },
+  {
+    name: 'Configuration',
+    component: Configuration,
+    options: {
+      title: 'Configuración',
+    },
+  },
+  {
+    name: 'Logout',
+    component: Logout,
+    options: {
+      title: 'Cerrar sesión',
+    },
+  },
+  {
+    name: 'PanicButton',
+    component: PanicButton,
+    options: {
+      title: 'Botón de pánico',
+      drawerItemStyle: {
+        height: 0,
+      },
+    },
+  },
+  {
+    name: 'Advices',
+    component: Advices,
+    options: {
+      title: 'Asesorías',
+      drawerItemStyle: {
+        height: 0,
+      },
+    },
+  },
+  {
+    name: 'CreateAdivce',
+    component: CreateAdvice,
+    options: {
+      title: 'Crear asesoría',
+      drawerItemStyle: {
+        height: 0,
+      },
+    },
+  },
+  {
+    name: 'UpdateAdvice',
+    component: UpdateAdvice,
+    options: {
+      title: 'Actualizar asesoría',
+      drawerItemStyle: {
+        height: 0,
+      },
+    },
+  },
+  {
+    name: 'Departments',
+    component: Departments,
+    options: {
+      title: 'Departamentos',
+      drawerItemStyle: {
+        height: 0,
+      },
+    },
+  },
+  {
+    name: 'CreateDepartment',
+    component: CreateDepartment,
+    options: {
+      title: 'Crear departamento',
+      drawerItemStyle: {
+        height: 0,
+      },
+    },
+  },
+  {
+    name: 'UpdateDepartment',
+    component: UpdateDepartment,
+    options: {
+      title: 'Actualizar departamento',
+      drawerItemStyle: {
+        height: 0,
+      },
+    },
+  },
+  {
+    name: 'CreateSuggestion',
+    component: Suggestion,
+    options: {
+      title: 'Crear sugerencia',
+      drawerItemStyle: {
+        height: 0,
+      },
+    },
+  },
+  {
+    name: 'UpdateAccount',
+    component: UpdateAccount,
+    options: {
+      title: 'Actualizar contacto',
+      drawerItemStyle: {
+        height: 0,
+      },
+    },
+  },
+  {
+    name: 'CreateContact',
+    component: CreateContact,
+    options: {
+      title: 'Crear contacto',
+      drawerItemStyle: {
+        height: 0,
+      },
+    },
+  },
+  {
+    name: 'UpdateContact',
+    component: UpdateContact,
+    options: {
+      title: 'Actualizar contacto',
+      drawerItemStyle: {
+        height: 0,
+      },
+    },
+  },
+];
+
+const Drawer = createDrawerNavigator<DrawerParamList>();
+
+const PrivateRouter = (): JSX.Element => {
+  const { colors } = useTheme();
+  const styles = privateRouterStyles(colors);
+  return (
+
+    <Drawer.Navigator screenOptions={styles} initialRouteName="Home" drawerContent={(props) => <DrawerContent {...props} />}>
+      {
+        routes.map((route) => (
+          <Drawer.Screen
+            key={route.name}
+            name={route.name}
+            component={route.component}
+            options={route.options}
+          />
+        ))
+      }
+    </Drawer.Navigator>
+  );
+};
+
+export default PrivateRouter;

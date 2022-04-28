@@ -5,7 +5,7 @@ import { navigationRef } from 'src/refs/navigation.ref';
 import { NavigationContainer } from '@react-navigation/native';
 import theme from 'src/constants/themes';
 import AuthProvider from './src/providers/auth.provider';
-import Router from './src/router/router';
+import Router from './src/router/Router';
 
 const App = (): JSX.Element => (
   <AuthProvider>
