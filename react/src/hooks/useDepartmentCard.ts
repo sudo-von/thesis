@@ -38,7 +38,7 @@ const useDepartmentCard = (id:string, email:string) => {
         },
         {
           text: 'Eliminar',
-          onPress: () => handleDelete(),
+          onPress: handleDelete,
         },
       ],
     );

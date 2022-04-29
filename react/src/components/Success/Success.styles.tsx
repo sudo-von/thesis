@@ -16,6 +16,7 @@ const successStyles = (color: string) => StyleSheet.create({
     color,
   },
   message: {
+    textAlign: 'center',
     marginTop: 15,
   },
 } as const);

@@ -184,8 +184,9 @@ const Drawer = createDrawerNavigator<DrawerParamList>();
 const PrivateRouter = (): JSX.Element => {
   const { colors } = useTheme();
   const styles = privateRouterStyles(colors);
+  const handleDrawerContent = (props) => <DrawerContent {...props} />;
   return (
-    <Drawer.Navigator screenOptions={styles} backBehavior="history" initialRouteName="Home" drawerContent={(props) => <DrawerContent {...props} />}>
+    <Drawer.Navigator screenOptions={styles} backBehavior="history" initialRouteName="Home" drawerContent={handleDrawerContent}>
       {
         routes.map((route) => (
           <Drawer.Screen
