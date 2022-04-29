@@ -19,7 +19,7 @@ const Button = ({
   const styles = buttonStyles(backgroundColor, color);
   return (
     <PaperButton
-      contentStyle={{ ...styles.button, ...style }}
+      style={{ ...styles.button, ...style }}
       labelStyle={styles.label}
       loading={loading}
       disabled={loading}

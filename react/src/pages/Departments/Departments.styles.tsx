@@ -10,7 +10,7 @@ const departmentsStyle = (color: string) => StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    height: 120,
+    height: 150,
     resizeMode: 'contain',
   },
   caption: {

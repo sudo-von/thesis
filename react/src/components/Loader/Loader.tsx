@@ -5,18 +5,22 @@ import { ActivityIndicator, useTheme } from 'react-native-paper';
 import { View } from 'react-native';
 
 type LoaderProps = {
-  loadingMessage: string,
+  loadingMessage?: string,
   size?: number,
+  showMessage?: boolean,
 };
 
-const Loader = ({ loadingMessage = 'Cargando...', size = 80 }: LoaderProps): JSX.Element => {
+const Loader = ({ loadingMessage = 'Cargando...', size = 80, showMessage = true }: LoaderProps): JSX.Element => {
   const theme = useTheme();
   return (
     <View>
       <ActivityIndicator size={size} color={theme.colors.primary} />
+      { showMessage
+      && (
       <Center>
         <Small style={{ color: theme.colors.accent }}>{loadingMessage}</Small>
       </Center>
+      )}
     </View>
   );
 };
