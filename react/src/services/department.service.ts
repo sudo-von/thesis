@@ -28,9 +28,9 @@ const deleteDepartmentByID = async (departmentId:string): Promise<void> => {
   await destroy(`${BASE_URL}/${departmentId}`);
 };
 
-const updateDepartmentByID = async (departmentId:string, departmentPayload:UpdateDepartmentPayload)
+const updateDepartmentByID = async (departmentPayload:UpdateDepartmentPayload)
 : Promise<void> => {
-  await patch(`${BASE_URL}/${departmentId}`, departmentPayload);
+  await patch(`${BASE_URL}/${departmentPayload.id}`, departmentPayload);
 };
 
 export {

@@ -7,6 +7,12 @@ const updateDepartmentStyles = StyleSheet.create({
   view: {
     marginVertical: 20,
   },
+  loader: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 } as const);
 
 export default updateDepartmentStyles;

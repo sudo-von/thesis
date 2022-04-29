@@ -1,32 +1,61 @@
-import { useState, useCallback, useEffect } from 'react';
-import { Alert } from 'react-native';
-import { Department } from 'src/entities/department';
-import { getDepartmentByID } from 'src/services/department.service';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useState, useCallback } from 'react';
+import { Department, UpdateDepartmentPayload } from 'src/entities/department';
+import { getDepartmentByID, updateDepartmentByID } from 'src/services/department.service';
 
 export const useSingleDepartment = (id:string) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [department, setDepartment] = useState<Department>();
+  const [loading, setLoading] = useState(true);
+  const [department, setDepartment] = useState<Department | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const navigation = useNavigation();
 
-  const handleDepartmentByID = useCallback(async () => {
+  const handleSingleDepartment = useCallback(async () => {
     try {
+      setError(null);
       setLoading(true);
-      const response:Department = await getDepartmentByID(id);
+      const response = await getDepartmentByID(id);
       setDepartment(response);
     } catch (e) {
-      Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
+      setError((e as Error).message);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    handleDepartmentByID();
+  const handleUpdateDepartment = useCallback(async (
+    departmentPayload:UpdateDepartmentPayload,
+  ): Promise<void> => {
+    try {
+      setSuccess(null);
+      setError(null);
+      setLoading(true);
+      await updateDepartmentByID(departmentPayload);
+      setSuccess('¡Has actualizado el departamento con éxito!');
+      navigation.goBack();
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      handleSingleDepartment();
+      return () => {
+        setDepartment(null);
+      };
+    }, []),
+  );
+
   return {
+    error,
     loading,
+    success,
     department,
     setDepartment,
+    handleUpdateDepartment,
   };
 };
 

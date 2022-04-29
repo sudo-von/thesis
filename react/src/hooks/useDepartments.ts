@@ -29,7 +29,12 @@ const useDepartments = () => {
     }, []),
   );
 
-  return { loading, departments, setDepartments };
+  return {
+    loading,
+    departments,
+    handleDepartments,
+    setDepartments,
+  };
 };
 
 export default useDepartments;

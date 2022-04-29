@@ -1,17 +1,27 @@
 import React from 'react';
 import { View } from 'react-native';
 import {
-  Field, FieldAttributes, Formik, FormikHelpers,
+  Field, FieldAttributes, Formik,
 } from 'formik';
 import {
-  Button, Error, Input, SelectInput,
+  Button, Input, SelectInput,
 } from 'src/components';
-import useDepartment from 'src/hooks/useDepartment';
-import { Department } from 'src/entities/department';
+import { UpdateDepartmentPayload } from 'src/entities/department';
 import { Option } from 'src/components/SelectInput/SelectInput';
 import updateDepartmentFormStyles from './UpdateDepartmentForm.styles';
 
-type UpdateDepartmentFormFields = {
+const options:Option[] = [
+  {
+    label: 'Disponible',
+    value: true,
+  },
+  {
+    label: 'Rentado',
+    value: false,
+  },
+];
+
+export type UpdateDepartmentFormFields = {
   id?: string,
   available?: boolean,
   cost?: string,
@@ -21,57 +31,37 @@ type UpdateDepartmentFormFields = {
 };
 
 type UpdateDepartmentFormProps = {
-  department?: Department,
+  loading: boolean,
+  initialValues: UpdateDepartmentFormFields,
+  handleValidation: ({
+    id,
+    available,
+    cost,
+    description,
+    neighborhood,
+    street,
+  }:UpdateDepartmentFormFields) => UpdateDepartmentFormFields,
+  handleUpdateDepartment: (updateDepartmentPayload: UpdateDepartmentPayload) => Promise<void>
 };
 
-const UpdateDepartmentForm = ({ department }:UpdateDepartmentFormProps) => {
-  const { loading, error, handleUpdateDepartment } = useDepartment();
-
-  const options:Option[] = [
-    {
-      label: 'Disponible',
-      value: true,
-    },
-    {
-      label: 'Rentado',
-      value: false,
-    },
-  ];
-
-  const initialValues:UpdateDepartmentFormFields = {
-    cost: department?.cost.toString(),
-    description: department?.description,
-    neighborhood: department?.neighborhood,
-    street: department?.street,
-    available: department?.available,
-  };
-
-  const handleValidation = ({
-    cost, description, neighborhood, street,
-  }:UpdateDepartmentFormFields) => {
-    const errors:UpdateDepartmentFormFields = {};
-    if (!cost) {
-      errors.cost = 'Costo requerido';
-    } else if (!/^\d+\.\d+$|^\d+$/.test(cost)) {
-      errors.cost = 'El costo sólo debe contener valores númericos';
-    }
-    if (!description) {
-      errors.description = 'Descripción requerida';
-    }
-    if (!neighborhood) {
-      errors.neighborhood = 'Colonia requerida';
-    }
-    if (!street) {
-      errors.street = 'Calle requerida';
-    }
-    return errors;
-  };
-
+const UpdateDepartmentForm = ({
+  loading,
+  initialValues,
+  handleValidation,
+  handleUpdateDepartment,
+}:UpdateDepartmentFormProps) => {
   const onSubmit = (
     values: UpdateDepartmentFormFields,
-    formik: FormikHelpers<UpdateDepartmentFormFields>,
   ) => {
-    handleUpdateDepartment(department?.id, values, formik.resetForm);
+    const payload:UpdateDepartmentPayload = {
+      id: values.id ?? '',
+      description: values.description ?? '',
+      street: values.street ?? '',
+      neighborhood: values.neighborhood ?? '',
+      cost: values.cost ? parseFloat(values.cost) : 0,
+      available: values.available ?? false,
+    };
+    handleUpdateDepartment(payload);
   };
 
   return (
@@ -128,8 +118,6 @@ const UpdateDepartmentForm = ({ department }:UpdateDepartmentFormProps) => {
             numberOfLines={5}
             multiline
           />
-          {error
-            && <Error message={error} />}
           <Button
             loading={loading}
             loadingMessage="Actualizando departamento..."

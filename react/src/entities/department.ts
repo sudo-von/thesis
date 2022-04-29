@@ -18,6 +18,7 @@ type DepartmentPayload = {
 };
 
 type UpdateDepartmentPayload = {
+  id: string,
   description: string,
   street: string,
   neighborhood: string,
