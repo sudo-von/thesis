@@ -9,7 +9,7 @@ import useDepartments from 'src/hooks/useDepartments';
 import departmentsStyle from './Departments.styles';
 import DepartmentCard from './Components/DepartmentCard/DepartmentCard';
 
-const image = require('assets/figma/apartment3.png');
+const image = require('assets/figma/department.png');
 
 const Departments = () => {
   const { colors } = useTheme();
