@@ -22,7 +22,6 @@ import DrawerContent from 'src/router/Components/DrawerContent/DrawerContent';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import BackButton from 'src/router/Components/BackButton/BackButton';
 import privateRouterStyles from './PrivateRouter.styles';
-import AddButton from '../AddButton/AddButton';
 
 const routes: Route[] = [
   {

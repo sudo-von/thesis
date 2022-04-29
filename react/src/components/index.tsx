@@ -18,6 +18,7 @@ export { default as Option } from './Option/Option';
 export { default as PasswordInput } from './PasswordInput/PasswordInput';
 export { default as SelectInput } from './SelectInput/SelectInput';
 export { default as SliderInput } from './SliderInput/SliderInput';
+export { default as Shape } from './Shape/Shape';
 export { default as Small } from './Small/Small';
 export { default as Success } from './Success/Success';
 export { default as Tabs } from './Tabs/Tabs';

@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, ScrollView, Image } from 'react-native';
-import { Loader, Container, Small } from 'src/components';
+import {
+  Loader, Container, Small, Shape,
+} from 'src/components';
 import { Caption, useTheme } from 'react-native-paper';
 import useUser from 'src/hooks/useUser';
 import useDepartments from 'src/hooks/useDepartments';
-import { Shapes } from 'react-native-background-shapes';
 import departmentsStyle from './Departments.styles';
 import DepartmentCard from './Components/DepartmentCard/DepartmentCard';
 
@@ -18,12 +19,7 @@ const Departments = () => {
   const styles = departmentsStyle(colors.background);
   return (
     <Container style={styles.container}>
-      <Shapes
-        primaryColor={colors.primary}
-        height={2.4}
-        borderRadius={30}
-        figures={[]}
-      />
+      <Shape backgroundColor={colors.primary} borderRadius={25} size={325} />
       <View style={styles.view}>
         <Image style={styles.image} source={image} />
         <Caption style={styles.caption}>¿Buscas departamento o te gustaría anunciar uno?</Caption>
