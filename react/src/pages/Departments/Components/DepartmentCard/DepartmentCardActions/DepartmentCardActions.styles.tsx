@@ -6,9 +6,6 @@ const departmentCardActionsStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
   },
-  fab: {
-    backgroundColor: '#04245c',
-  },
 } as const);
 
 export default departmentCardActionsStyles;

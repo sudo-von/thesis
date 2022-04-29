@@ -7,12 +7,6 @@ const departmentCardContentStyle = StyleSheet.create({
   header: {
     marginBottom: 15,
   },
-  content: {
-    marginVertical: 15,
-  },
-  user: {
-    fontSize: 16,
-  },
 } as const);
 
 export default departmentCardContentStyle;
