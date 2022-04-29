@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const adviceCardContentStyle = StyleSheet.create({
+const departmentCardContentStyle = StyleSheet.create({
   cardContent: {
     padding: 8,
   },
@@ -15,4 +15,4 @@ const adviceCardContentStyle = StyleSheet.create({
   },
 } as const);
 
-export default adviceCardContentStyle;
+export default departmentCardContentStyle;

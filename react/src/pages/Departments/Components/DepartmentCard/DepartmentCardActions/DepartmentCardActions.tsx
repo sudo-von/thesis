@@ -1,21 +1,20 @@
 import React from 'react';
 import { Alert, Linking } from 'react-native';
-import { FAB, Card } from 'react-native-paper';
+import { Card, useTheme } from 'react-native-paper';
 import { deleteDepartmentByID } from 'src/services/department.service';
 import { useNavigation } from '@react-navigation/native';
-import { Department } from 'src/entities/department';
 import { BasicUser } from 'src/entities/user';
+import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import departmentCardActionsStyles from './DepartmentCardActions.styles';
 
 type DepartmentCardActionsProps = {
   id: string
   departmentUser: BasicUser,
-  setDepartments: React.Dispatch<React.SetStateAction<Department[]>>,
   userID: string,
 };
 
 const DepartmentCardActions = ({
-  id, departmentUser, userID, setDepartments,
+  id, departmentUser, userID,
 }:DepartmentCardActionsProps) => {
   const navigation = useNavigation();
 
@@ -30,11 +29,6 @@ const DepartmentCardActions = ({
   const handleDelete = async (): Promise<void> => {
     try {
       await deleteDepartmentByID(id);
-      setDepartments(
-        (departments:Department[]) => departments.filter(
-          (department:Department) => department.id !== id,
-        ),
-      );
     } catch (e) {
       Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
     }
@@ -56,14 +50,16 @@ const DepartmentCardActions = ({
     );
   };
 
+  const theme = useTheme();
   return (
     <Card.Actions style={departmentCardActionsStyles.cardActions}>
       { userID !== departmentUser.id
-        && <FAB onPress={handleEmail} style={departmentCardActionsStyles.fab} color="#FFFFFF" small icon="email" />}
+        && <MaterialCommunityIcons onPress={handleEmail} name="email-outline" size={24} color={theme.colors.primary} /> }
       { userID === departmentUser.id
-        && <FAB onPress={handleEdit} style={departmentCardActionsStyles.fab} color="#FFFFFF" small icon="pencil" />}
+        && <FontAwesome onPress={handleEdit} name="edit" size={24} color={theme.colors.primary} /> }
       { userID === departmentUser.id
-        && <FAB onPress={handleDeleteModal} style={departmentCardActionsStyles.fab} color="#FFFFFF" small icon="delete" />}
+        && <MaterialIcons onPress={handleDeleteModal} name="delete-outline" size={26} color={theme.colors.primary} /> }
+      <MaterialIcons name="search" size={24} color={theme.colors.primary} />
     </Card.Actions>
   );
 };

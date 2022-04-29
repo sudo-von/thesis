@@ -8,6 +8,8 @@ const privateRouterStyles = (colors:ReactNativePaper.ThemeColors) => ({
   headerTintColor: colors.background,
   headerStyle: {
     backgroundColor: colors.primary,
+    elevation: 0,
+    shadowOpacity: 0,
   },
 } as const);
 

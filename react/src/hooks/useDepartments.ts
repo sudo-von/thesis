@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import { Alert } from 'react-native';
 import { getDepartments } from 'src/services/department.service';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Department } from 'src/entities/department';
 
 const useDepartments = () => {
-  const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [departments, setDepartments] = useState<Department[]>([]);
 
@@ -21,13 +20,15 @@ const useDepartments = () => {
     }
   };
 
-  useEffect(() => {
-    handleDepartments();
-    const willFocusSubscription = navigation.addListener('focus', () => {
+  useFocusEffect(
+    useCallback(() => {
       handleDepartments();
-    });
-    return willFocusSubscription;
-  }, []);
+      return () => {
+        setDepartments([]);
+      };
+    }, []),
+  );
+
   return { loading, departments, setDepartments };
 };
 

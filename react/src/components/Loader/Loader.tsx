@@ -1,21 +1,24 @@
 import React from 'react';
-import Container from 'src/components/Container/Container';
 import Center from 'src/components/Center/Center';
 import Small from 'src/components/Small/Small';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { View } from 'react-native';
 
 type LoaderProps = {
   loadingMessage: string,
   size?: number,
 };
 
-const Loader = ({ loadingMessage = 'Cargando...', size = 80 }: LoaderProps): JSX.Element => (
-  <Container style={{ justifyContent: 'center' }}>
-    <ActivityIndicator size={size} />
-    <Center>
-      <Small>{loadingMessage}</Small>
-    </Center>
-  </Container>
-);
+const Loader = ({ loadingMessage = 'Cargando...', size = 80 }: LoaderProps): JSX.Element => {
+  const theme = useTheme();
+  return (
+    <View>
+      <ActivityIndicator size={size} color={theme.colors.primary} />
+      <Center>
+        <Small style={{ color: theme.colors.accent }}>{loadingMessage}</Small>
+      </Center>
+    </View>
+  );
+};
 
 export default Loader;

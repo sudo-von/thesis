@@ -5,6 +5,7 @@
     "jsx": "react-native",
     "noEmit": true,
     "strict": true,
+    "noImplicitAny": false,
     "isolatedModules": true,
     "esModuleInterop": true,
     "baseUrl": "./",

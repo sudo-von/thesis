@@ -6,14 +6,12 @@ import { deleteToken } from 'src/services/token.service';
 import { useAuth } from 'src/contexts/auth.context';
 import { AuthActionKind } from 'src/reducers/auth.actions';
 import { UserPayload } from 'src/entities/user';
-import { useNavigation } from '@react-navigation/native';
 
 const useUser = () => {
   const { authState, authDispatch } = useAuth();
   const { user, isLoggedIn } = authState;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | string>(null);
-  const navigation = useNavigation();
 
   const handleLogin = useCallback(async (
     { email, password }: { email: string, password: string },
@@ -24,7 +22,6 @@ const useUser = () => {
       const response = await login({ email, password });
       setLoading(false);
       authDispatch({ type: AuthActionKind.LOGIN, payload: response.user });
-      navigation.navigate('Home');
     } catch (e) {
       setLoading(false);
       setError((e as Error).message);
