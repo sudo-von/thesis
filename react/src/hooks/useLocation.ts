@@ -1,18 +1,23 @@
-import { useState, useEffect } from 'react';
-import { Linking, Alert, Platform } from 'react-native';
+import { useState, useCallback } from 'react';
+import { Linking } from 'react-native';
 import { getContactByUserID } from 'src/services/contact.service';
-import { checkPermissions, getCoords } from 'src/services/location.service';
-import { useNavigation } from '@react-navigation/native';
+import { getLocationPermissionStatus, getCurrentPosition } from 'src/services/location.service';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Contact } from 'src/entities/contact';
 import * as Location from 'expo-location';
+import { formatPlatformURL } from 'src/helpers/url-helper';
 
 const useLocation = (userID:string) => {
   const navigation = useNavigation();
   const [message, setMessage] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   const handlePermissions = async (): Promise<void> => {
     setMessage('Revisando permisos...');
-    await checkPermissions();
+    const status = await getLocationPermissionStatus();
+    if (status !== 'granted') {
+      throw new Error('Considera habilitar el permiso de ubicación, sin este permiso no podremos acceder a tu ubicación.');
+    }
   };
 
   const handleContact = async (): Promise<Contact> => {
@@ -21,45 +26,55 @@ const useLocation = (userID:string) => {
     return contact;
   };
 
-  const handleLocalization = async (): Promise<Location.LocationObject> => {
-    setMessage('Abriendo whatsapp...');
-    const location = await getCoords();
+  const handleCurrentPosition = async (): Promise<Location.LocationObject> => {
+    setMessage('Obteniendo ubicación...');
+    const location = await getCurrentPosition();
     return location;
   };
 
-  const handleWhatsappURL = (contact:Contact, location:Location.LocationObject): string => {
-    setMessage('Abriendo whatsapp...');
-    const text = Platform.OS === 'ios' ? `¡Hola ${contact.contactName}! ${contact.message}` : encodeURI(`¡Hola ${contact.contactName}! ${contact.message}`);
+  const handleURL = (contact:Contact, location:Location.LocationObject): string => {
+    setMessage('Generando mensaje de emergencia...');
+    const text = formatPlatformURL(`¡Hola ${contact.contactName}! ${contact.message}`);
     const googleMapsURL = `https://www.google.com/maps?q=${location.coords.latitude},${location.coords.longitude}`;
-    const whatsappWebURL = `https://wa.me/${contact.contactNumber}?text=${text}, esta es mi ubicación: ${googleMapsURL}`;
+    const whatsappWebURL = formatPlatformURL(`https://wa.me/${contact.contactNumber}?text=${text}, esta es mi ubicación: ${googleMapsURL}`);
     return whatsappWebURL;
+  };
+
+  const handleWhatsapp = async (url:string): Promise<void> => {
+    setMessage('Abriendo whatsapp...');
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      throw new Error('No ha sido posible acceder a whatsapp.');
+    }
   };
 
   const handleMessage = async () => {
     try {
+      setError(null);
+      setMessage('');
       await handlePermissions();
       const contact = await handleContact();
-      const location = await handleLocalization();
-      const whatsappURL = handleWhatsappURL(contact, location);
-      const supported = await Linking.canOpenURL(whatsappURL);
-      if (supported) {
-        await Linking.openURL(whatsappURL);
-      } else {
-        throw new Error('No ha sido posible acceder a la URL.');
-      }
+      const location = await handleCurrentPosition();
+      const url = handleURL(contact, location);
+      await handleWhatsapp(url);
     } catch (e) {
-      Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
+      setError((e as Error).message);
     } finally {
       navigation.navigate('Home');
     }
   };
 
-  useEffect(() => {
-    handleMessage();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      handleMessage();
+    }, []),
+  );
 
   return {
     message,
+    error,
   };
 };
 
