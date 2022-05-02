@@ -8,7 +8,7 @@ import { Title } from 'react-native-paper';
 import Mood from 'src/pages/Home/Components/Mood/Mood';
 import NavigationCard, { NavigationCardProps } from 'src/components/NavigationCard/NavigationCard';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getFirstName } from 'src/helpers/user-helper';
+import { getFirstName, truncateName } from 'src/helpers/user-helper';
 import homeStyles from './Home.styles';
 
 const navigationCards: NavigationCardProps[] = [
@@ -51,7 +51,7 @@ const welcomeImage = require('assets/figma/welcome.png');
 const Home = () => {
   const { user } = useUser();
   const { userName, userId } = user;
-  const firstName = getFirstName(userName);
+  const firstName = truncateName(getFirstName(userName));
   return (
     <Container>
       <Mood
@@ -67,7 +67,7 @@ const Home = () => {
           source={welcomeImage}
           style={homeStyles.image}
         />
-        <View>
+        <View style={homeStyles.textView}>
           <Title style={homeStyles.title}>
             <Bold>¡Hola {firstName}!</Bold>
           </Title>

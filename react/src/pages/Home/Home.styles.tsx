@@ -19,6 +19,9 @@ const homeStyles = StyleSheet.create({
   scrollView: {
     paddingHorizontal: 5,
   },
+  textView: {
+    flex: 1,
+  },
 } as const);
 
 export default homeStyles;
