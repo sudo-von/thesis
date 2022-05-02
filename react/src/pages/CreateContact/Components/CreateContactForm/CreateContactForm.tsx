@@ -1,52 +1,46 @@
-import React, { useState } from 'react';
-import { View, Alert } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { FieldAttributes, Formik } from 'formik';
 import { Input, Button } from 'src/components';
-import { createContactByUserID } from 'src/services/contact.service';
-import { styles } from './CreateContactForm.styles';
+import { ContactPayload } from 'src/entities/contact';
+import { useNavigation } from '@react-navigation/native';
+import creacteContactFormStyles from './CreateContactForm.styles';
 
-type CreateContactFormFields = {
+export type CreateContactFormFields = {
   contact_name?: string,
   contact_number?: string,
   message?: string,
 };
 
 type CreateContactFormProps = {
-  userID: string,
+  userId: string,
+  loading: boolean,
+  initialValues: CreateContactFormFields,
+  handleValidation: (payload: CreateContactFormFields) => CreateContactFormFields,
+  handleCreate: (userId: string, payload: ContactPayload) => Promise<void>
 };
 
-const CreateContactForm = ({ userID }: CreateContactFormProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const initialValues:CreateContactFormFields = {
-    contact_name: '',
-    contact_number: '',
-    message: '',
-  };
-
-  const handleValidation = ({ contact_name, contact_number, message }:CreateContactFormFields) => {
-    const errors:CreateContactFormFields = {};
-    if (!contact_name) {
-      errors.contact_name = 'Nombre del contacto requerido';
-    }
-    if (!contact_number) {
-      errors.contact_number = 'Número de contacto requerido';
-    }
-    if (!message) {
-      errors.message = 'Mensaje de auxilio requerido';
-    }
-    return errors;
-  };
-
-  const onSubmit = async (form:CreateContactFormFields) => {
+const CreateContactForm = ({
+  userId,
+  loading,
+  initialValues,
+  handleValidation,
+  handleCreate,
+}: CreateContactFormProps) => {
+  const navigation = useNavigation();
+  const handleOnSubmit = async (
+    values: CreateContactFormFields,
+  ): Promise<void> => {
+    const payload:ContactPayload = {
+      contactName: values.contact_name ?? '',
+      contactNumber: values.contact_number ?? '',
+      message: values.message ?? '',
+    };
     try {
-      setLoading(true);
-      const createResponse = await createContactByUserID(userID, form);
-      setLoading(false);
-      Alert.alert(createResponse, 'El contacto ha sido guardado con éxito.');
-    } catch (e) {
-      setLoading(false);
-      Alert.alert('¡Ha ocurrido un error al registrar tu contacto!', (e as Error).message);
+      await handleCreate(userId, payload);
+      navigation.navigate('Home');
+    } catch (error) {
+      navigation.navigate('Configuration');
     }
   };
 
@@ -56,7 +50,7 @@ const CreateContactForm = ({ userID }: CreateContactFormProps) => {
       validateOnChange={false}
       validateOnBlur={false}
       validate={handleValidation}
-      onSubmit={onSubmit}
+      onSubmit={handleOnSubmit}
       enableReinitialize
     >
       {({
@@ -89,7 +83,7 @@ const CreateContactForm = ({ userID }: CreateContactFormProps) => {
             loading={loading}
             onPress={handleSubmit}
             loadingMessage="Guardando contacto..."
-            style={styles.button}
+            style={creacteContactFormStyles.button}
           >
             Crear contacto
           </Button>

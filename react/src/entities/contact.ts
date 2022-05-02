@@ -7,7 +7,6 @@ export type Contact = {
 };
 
 export type ContactPayload = {
-  id: string,
   contactName: string,
   contactNumber: string,
   message: string,

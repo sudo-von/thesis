@@ -1,7 +1,9 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
-    button: {
-        marginVertical: 40
-    }
-})
+const creacteContactFormStyles = StyleSheet.create({
+  button: {
+    marginVertical: 40,
+  },
+} as const);
+
+export default creacteContactFormStyles;
