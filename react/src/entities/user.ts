@@ -13,6 +13,14 @@ type UserPayload = {
   password: string,
 };
 
+type UpdateUserPayload = {
+  id: string,
+  name: string,
+  birthDate: string,
+  email: string,
+  registrationNumber: string,
+};
+
 type TinyUser = {
   id: string,
   name: string,
@@ -33,4 +41,5 @@ export type {
   UserPayload,
   TinyUser,
   TinyUserPayload,
+  UpdateUserPayload,
 };

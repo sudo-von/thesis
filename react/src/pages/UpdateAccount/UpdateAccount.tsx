@@ -1,34 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, View } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import {
-  Container, Small, Bold, Loader,
+  Container, Small, Bold, Loader, Error, Success,
 } from 'src/components';
 import { Title } from 'react-native-paper';
-import { getUserByID } from 'src/services/user.service';
 import useUser from 'src/hooks/useUser';
-import { TinyUser } from 'src/entities/user';
+import { ScrollView } from 'react-native-gesture-handler';
+import useSingleUser from 'src/hooks/useSingleUser';
 import updateAccountStyles from './UpdateAccount.styles';
-import UpdateAccountForm from './Components/UpdateAccountForm/UpdateAccountForm';
+import UpdateAccountForm, { UpdateAccountFormFields } from './Components/UpdateAccountForm/UpdateAccountForm';
 
 const UpdateAccount = () => {
-  const { user } = useUser();
-  const { userId } = user;
-  const [account, setAccount] = useState<TinyUser>();
-  const [loading, setLoading] = useState(true);
+  const {
+    user: localUser,
+    handleUpdate,
+    loading: updateLoading,
+    error: updateError,
+    success,
+  } = useUser();
+  const { userId } = localUser;
+  const { user, error, loading } = useSingleUser(userId);
 
-  useEffect(() => {
-    const searchAccount = async () => {
-      try {
-        const response:TinyUser = await getUserByID(userId);
-        setAccount(response);
-      } catch (e) {
-        Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    searchAccount();
-  }, []);
+  const initialValues:UpdateAccountFormFields = {
+    name: user?.name,
+    birth_date: user?.birthDate,
+    email: user?.email,
+    registration_number: user?.registrationNumber,
+  };
+
+  const handleValidation = (
+    {
+      name, birth_date, email, registration_number,
+    }:UpdateAccountFormFields,
+  ): UpdateAccountFormFields => {
+    const errors:UpdateAccountFormFields = {};
+    if (!name) {
+      errors.name = 'Nombre requerido';
+    }
+    if (!birth_date) {
+      errors.birth_date = 'Fecha de nacimiento requerida';
+    }
+    if (!email) {
+      errors.email = 'Correo requerido';
+    }
+    if (!registration_number) {
+      errors.registration_number = 'Matrícula requerida';
+    } else if (registration_number?.length !== 8) {
+      errors.registration_number = 'La matrícula sólo puede 8 dígitos';
+    }
+    return errors;
+  };
 
   return (
     <Container style={updateAccountStyles.container}>
@@ -37,8 +58,28 @@ const UpdateAccount = () => {
         <Small>Modifica tu información personal para estar al día.</Small>
       </View>
       { loading
-        ? <Loader size={80} loadingMessage="Cargando contacto" />
-        : <UpdateAccountForm account={account} />}
+        ? (
+          <View style={updateAccountStyles.loader}>
+            <Loader loadingMessage="Cargando información de la cuenta..." size={85} />
+          </View>
+        )
+        : user && (
+          <ScrollView>
+            <UpdateAccountForm
+              account={user}
+              loading={updateLoading}
+              handleUpdate={handleUpdate}
+              initialValues={initialValues}
+              handleValidation={handleValidation}
+            />
+          </ScrollView>
+        )}
+      {error
+        && <Error message={error} /> }
+      { updateError
+        && <Error message={updateError} /> }
+      {success
+        && <Success message={success} /> }
     </Container>
   );
 };

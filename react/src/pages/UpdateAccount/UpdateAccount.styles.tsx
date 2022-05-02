@@ -7,6 +7,12 @@ const updateAccountStyles = StyleSheet.create({
   view: {
     marginVertical: 40,
   },
+  loader: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 } as const);
 
 export default updateAccountStyles;

@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { View, Alert } from 'react-native';
-import { Formik, Field, FieldAttributes } from 'formik';
+import React from 'react';
+import { View } from 'react-native';
+import {
+  Formik,
+  Field,
+  FieldAttributes,
+} from 'formik';
 import { Input, Datepicker, Button } from 'src/components';
-import { updateUserByID } from 'src/services/user.service';
-import { useAuth } from 'src/contexts/auth.context';
-import { TinyUser } from 'src/entities/user';
-import { AuthActionKind } from 'src/reducers/auth.actions';
+import { TinyUser, UpdateUserPayload } from 'src/entities/user';
 import updateAccountFormStyles from './UpdateAccountForm.styles';
 
-type UpdateAccountFormFields = {
+export type UpdateAccountFormFields = {
   name?: string,
   birth_date?: string,
   email?: string,
@@ -16,57 +17,34 @@ type UpdateAccountFormFields = {
 };
 
 type UpdateAccountFormProps = {
-  account?: TinyUser
+  account: TinyUser
+  loading: boolean,
+  initialValues:UpdateAccountFormFields,
+  handleUpdate: (payload: UpdateUserPayload) => Promise<void>,
+  handleValidation: (account: UpdateAccountFormFields) => UpdateAccountFormFields,
 };
 
-const UpdateAccountForm = ({ account }:UpdateAccountFormProps):JSX.Element => {
-  const { authDispatch } = useAuth();
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const initialValues:UpdateAccountFormFields = {
-    name: account?.name,
-    birth_date: account?.birthDate,
-    email: account?.email,
-    registration_number: account?.registrationNumber,
-  };
-
-  const handleValidation = ({
-    name, birth_date, email, registration_number,
-  }:UpdateAccountFormFields) => {
-    const errors:UpdateAccountFormFields = {};
-    if (!name) {
-      errors.name = 'Nombre requerido';
-    }
-    if (!birth_date) {
-      errors.birth_date = 'Fecha de nacimiento requerida';
-    }
-    if (!email) {
-      errors.email = 'Correo requerido';
-    }
-    if (!registration_number) {
-      errors.registration_number = 'Matrícula requerida';
-    }
-    return errors;
-  };
-
-  const onHandleSubmit = async (data:UpdateAccountFormFields) => {
-    try {
-      setLoading(true);
-      await updateUserByID(account.id, data);
-      Alert.alert('¡Felicidades!', '¡Has actualizado tus datos con éxito!');
-      authDispatch({ type: AuthActionKind.UPDATE, payload: { userName: data?.name } });
-    } catch (e) {
-      Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
-    } finally {
-      setLoading(false);
-    }
+const UpdateAccountForm = ({
+  account, loading, initialValues, handleUpdate, handleValidation,
+}:UpdateAccountFormProps):JSX.Element => {
+  const handleOnSubmit = async (
+    values: UpdateAccountFormFields,
+  ): Promise<void> => {
+    const payload:UpdateUserPayload = {
+      id: account.id,
+      name: values.name ?? '',
+      birthDate: values.birth_date ?? '',
+      email: values.email ?? '',
+      registrationNumber: values.registration_number ?? '',
+    };
+    handleUpdate(payload);
   };
 
   return (
     <Formik
       initialValues={initialValues}
       validate={handleValidation}
-      onSubmit={onHandleSubmit}
+      onSubmit={handleOnSubmit}
       validateOnChange={false}
       validateOnBlur={false}
       enableReinitialize
