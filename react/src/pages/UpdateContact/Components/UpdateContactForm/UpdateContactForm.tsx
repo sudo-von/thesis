@@ -1,54 +1,41 @@
-import React, { useState } from 'react';
-import { View, Alert } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { FieldAttributes, Formik } from 'formik';
 import { Input, Button } from 'src/components';
-import { updateContactByID } from 'src/services/contact.service';
-import { Contact } from 'src/entities/contact';
+import { Contact, UpdateContactPayload } from 'src/entities/contact';
 import updateContactFormStyles from './UpdateContactForm.styles';
 
-type UpdateContactFormFields = {
+export type UpdateContactFormFields = {
   contact_name?: string,
   contact_number?: string,
   message?: string,
 };
 
 type UpdateContactFormProps = {
-  contact?: Contact,
+  contact: Contact,
+  loading: boolean,
+  initialValues:UpdateContactFormFields,
+  handleUpdate: (payload: UpdateContactPayload) => Promise<void>,
+  handleValidation: (contact: UpdateContactFormFields) => UpdateContactFormFields,
 };
 
-const UpdateContactForm = ({ contact }:UpdateContactFormProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const initialValues:UpdateContactFormFields = {
-    contact_name: contact?.contactName,
-    contact_number: contact?.contactNumber,
-    message: contact?.message,
-  };
-
-  const handleValidation = ({ contact_name, contact_number, message }:UpdateContactFormFields) => {
-    const errors:UpdateContactFormFields = {};
-    if (!contact_name) {
-      errors.contact_name = 'Nombre del contacto requerido';
-    }
-    if (!contact_number) {
-      errors.contact_number = 'Número de contacto requerido';
-    }
-    if (!message) {
-      errors.message = 'Mensaje de auxilio requerido';
-    }
-    return errors;
-  };
-
-  const onSubmit = async (form:UpdateContactFormFields) => {
-    try {
-      setLoading(true);
-      const response = await updateContactByID(contact.id, form);
-      Alert.alert('¡Felicidades!', response);
-    } catch (e) {
-      Alert.alert('¡Ha ocurrido un error al actualizar tu contacto!', (e as Error).message);
-    } finally {
-      setLoading(false);
-    }
+const UpdateContactForm = ({
+  contact,
+  loading,
+  initialValues,
+  handleUpdate,
+  handleValidation,
+}:UpdateContactFormProps) => {
+  const handleOnSubmit = async (
+    values: UpdateContactFormFields,
+  ): Promise<void> => {
+    const payload:UpdateContactPayload = {
+      id: contact.id,
+      contactName: values.contact_name ?? '',
+      contactNumber: values.contact_number ?? '',
+      message: values.message ?? '',
+    };
+    await handleUpdate(payload);
   };
 
   return (
@@ -57,7 +44,7 @@ const UpdateContactForm = ({ contact }:UpdateContactFormProps) => {
       validateOnChange={false}
       validateOnBlur={false}
       validate={handleValidation}
-      onSubmit={onSubmit}
+      onSubmit={handleOnSubmit}
       enableReinitialize
     >
       {({

@@ -1,56 +1,94 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { View, ScrollView } from 'react-native';
 import {
-  Alert, View, SafeAreaView, ScrollView,
-} from 'react-native';
-import {
-  Container, Small, Bold, Loader,
+  Container, Small, Bold, Loader, Success, Error,
 } from 'src/components';
 import { Title } from 'react-native-paper';
 import useUser from 'src/hooks/useUser';
-import { getContactByUserID } from 'src/services/contact.service';
-import { Contact } from 'src/entities/contact';
-import creacteContactStyles from './UpdateContact.styles';
-import UpdateContactForm from './Components/UpdateContactForm/UpdateContactForm';
+import useSingleContact from 'src/hooks/useSingleContact';
+import useContact from 'src/hooks/useContact';
+import { Error as ErrorEntity } from 'src/entities/error';
+import updateContactStyles from './UpdateContact.styles';
+import UpdateContactForm, { UpdateContactFormFields } from './Components/UpdateContactForm/UpdateContactForm';
 
-const ContactConfiguration = () => {
+const UpdateContact = () => {
   const { user } = useUser();
   const { userId } = user;
 
-  const [contact, setContact] = useState<Contact>();
-  const [loading, setLoading] = useState<boolean>(true);
+  const {
+    contact,
+    loading: contactLoading,
+    error: contactError,
+  } = useSingleContact(userId);
 
-  useEffect(() => {
-    const searchContact = async () => {
-      try {
-        const response:Contact = await getContactByUserID(userId);
-        setContact(response);
-      } catch (e) {
-        Alert.alert('¡No ha sido posible cargar la información de tu contacto!', (e as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    searchContact();
-  }, []);
+  const {
+    success,
+    handleUpdate,
+    loading: updateLoading,
+    error: errorLoading,
+  } = useContact();
+
+  let error:ErrorEntity = null;
+  if (contactError) {
+    error = contactError;
+  } else if (errorLoading) {
+    error = errorLoading;
+  }
+
+  const initialValues:UpdateContactFormFields = {
+    contact_name: contact?.contactName,
+    contact_number: contact?.contactNumber,
+    message: contact?.message,
+  };
+
+  const handleValidation = ({ contact_name, contact_number, message }:UpdateContactFormFields) => {
+    const errors:UpdateContactFormFields = {};
+    if (!contact_name) {
+      errors.contact_name = 'Nombre del contacto requerido';
+    }
+    if (!contact_number) {
+      errors.contact_number = 'Número de contacto requerido';
+    } else if (contact_number?.length !== 12) {
+      errors.contact_number = 'Ingresa un número de teléfono válido';
+    }
+    if (!message) {
+      errors.message = 'Mensaje de auxilio requerido';
+    }
+    return errors;
+  };
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <Container style={creacteContactStyles.container}>
-          <View style={creacteContactStyles.view}>
-            <Title><Bold>¡Es importante mantener informados a tus seres queridos!</Bold></Title>
-            <Small>
-              Modifica tu información de contacto
-              para alertar a tus seres queridos en cualquier momento.
-            </Small>
+    <Container style={updateContactStyles.container}>
+      <View style={updateContactStyles.view}>
+        <Title><Bold>¡Tu contacto de emergencia puede ser de ayuda!</Bold></Title>
+        <Small>
+          Modifica tu información de contacto
+          para mantener informados a tus seres queridos.
+        </Small>
+      </View>
+      { contactLoading
+        ? (
+          <View style={updateContactStyles.loader}>
+            <Loader loadingMessage="Cargando contacto..." size={85} />
           </View>
-          { loading
-            ? <Loader size={80} loadingMessage="Cargando contacto" />
-            : <UpdateContactForm contact={contact} />}
-        </Container>
-      </ScrollView>
-    </SafeAreaView>
+        )
+        : contact && (
+          <ScrollView>
+            <UpdateContactForm
+              contact={contact}
+              loading={updateLoading}
+              handleUpdate={handleUpdate}
+              initialValues={initialValues}
+              handleValidation={handleValidation}
+            />
+          </ScrollView>
+        )}
+      {error
+        && <Error message={error} /> }
+      {success
+        && <Success message={success} /> }
+    </Container>
   );
 };
 
-export default ContactConfiguration;
+export default UpdateContact;

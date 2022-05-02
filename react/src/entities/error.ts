@@ -1,3 +1,1 @@
-export type Error = {
-  message: string,
-};
+export type Error = null | string;

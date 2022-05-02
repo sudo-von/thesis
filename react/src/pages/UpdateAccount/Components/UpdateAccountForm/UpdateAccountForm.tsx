@@ -37,7 +37,7 @@ const UpdateAccountForm = ({
       email: values.email ?? '',
       registrationNumber: values.registration_number ?? '',
     };
-    handleUpdate(payload);
+    await handleUpdate(payload);
   };
 
   return (
