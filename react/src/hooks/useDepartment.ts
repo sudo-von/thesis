@@ -1,46 +1,52 @@
-import { useState, useCallback } from 'react';
-import { Alert } from 'react-native';
-import { createDepartment, updateDepartmentByID } from 'src/services/department.service';
 import { useNavigation } from '@react-navigation/native';
+import { useState, useCallback } from 'react';
+import { DepartmentPayload, UpdateDepartmentPayload } from 'src/entities/department';
+import { createDepartment, updateDepartmentByID } from 'src/services/department.service';
 
-const useDepartment = () => {
-  const navigation = useNavigation();
+export const useDepartment = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const navigation = useNavigation();
 
-  const handleCreateDepartment = useCallback(async (form, resetForm) => {
+  const handleCreateDepartment = useCallback(async (
+    departmentPayload:DepartmentPayload,
+  ): Promise<void> => {
     try {
+      setSuccess(null);
       setError(null);
       setLoading(true);
-      await createDepartment({ ...form, cost: parseFloat(form.cost) });
+      await createDepartment(departmentPayload);
       setLoading(false);
-      Alert.alert('¡Felicidades!', '¡Has registrado el departamento con éxito!');
-      resetForm();
+      setSuccess('¡Has registrado un departamento con éxito!');
       navigation.goBack();
     } catch (e) {
-      setLoading(false);
       setError((e as Error).message);
+      setLoading(false);
     }
   }, []);
 
-  const handleUpdateDepartment = useCallback(async (id, form, resetForm) => {
+  const handleUpdateDepartment = useCallback(async (
+    departmentPayload:UpdateDepartmentPayload,
+  ): Promise<void> => {
     try {
+      setSuccess(null);
       setError(null);
       setLoading(true);
-      await updateDepartmentByID(id, { ...form, cost: parseFloat(form.cost) });
+      await updateDepartmentByID(departmentPayload);
       setLoading(false);
-      Alert.alert('¡Felicidades!', '¡Has actualizado el departamento con éxito!');
-      resetForm();
+      setSuccess('¡Has actualizado el departamento con éxito!');
       navigation.goBack();
     } catch (e) {
-      setLoading(false);
       setError((e as Error).message);
+      setLoading(false);
     }
   }, []);
 
   return {
-    loading,
     error,
+    loading,
+    success,
     handleCreateDepartment,
     handleUpdateDepartment,
   };

@@ -24,6 +24,7 @@ import BackButton from 'src/router/Components/BackButton/BackButton';
 import { BATTERY_TASK, handleBatteryBackgroundTask, registerBackgroundTask } from 'src/services/background.service';
 import * as TaskManager from 'expo-task-manager';
 import privateRouterStyles from './PrivateRouter.styles';
+import AddButton from '../AddButton/AddButton';
 
 TaskManager.defineTask(BATTERY_TASK, handleBatteryBackgroundTask);
 
@@ -113,6 +114,7 @@ const routes: Route[] = [
         height: 0,
       },
       headerLeft: BackButton,
+      headerRight: () => AddButton('CreateDepartment'),
     },
   },
   {

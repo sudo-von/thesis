@@ -11,9 +11,10 @@ import departmentCardStyles from './DepartmentCard.styles';
 type DepartmentCardProps = {
   userID: string,
   department: Department
+  handleDepartments: () => Promise<void>,
 };
 
-const DepartmentCard = ({ department, userID }: DepartmentCardProps) => {
+const DepartmentCard = ({ department, userID, handleDepartments }: DepartmentCardProps) => {
   const {
     loading,
     error,
@@ -39,6 +40,7 @@ const DepartmentCard = ({ department, userID }: DepartmentCardProps) => {
             handleEmail={handleEmail}
             handleUpdate={handleUpdate}
             handleDeleteModal={handleDeleteModal}
+            handleDepartments={handleDepartments}
           />
         )}
       { error

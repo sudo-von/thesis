@@ -1,53 +1,50 @@
 import React from 'react';
 import { View } from 'react-native';
 import { FieldAttributes, Formik, FormikHelpers } from 'formik';
-import { Input, Button, Error } from 'src/components';
-import useDepartment from 'src/hooks/useDepartment';
+import { Input, Button } from 'src/components';
+import { DepartmentPayload } from 'src/entities/department';
 import createDepartmentFormStyles from './CreateDepartmentForm.styles';
 
-type CreateDepartmentFormFields = {
+export type CreateDepartmentFormFields = {
   cost?: string,
   description?: string,
   neighborhood?: string,
   street?: string,
 };
 
-const CreateDepartmentForm = ():JSX.Element => {
-  const { loading, error, handleCreateDepartment } = useDepartment();
-
-  const initialValues:CreateDepartmentFormFields = {
-    cost: '',
-    description: '',
-    neighborhood: '',
-    street: '',
-  };
-
-  const handleValidation = ({
+export type CreateDepartmentFormProps = {
+  error: boolean,
+  loading: boolean,
+  initialValues: CreateDepartmentFormFields
+  handleValidation: ({
     cost, description, neighborhood, street,
-  }:CreateDepartmentFormFields) => {
-    const errors:CreateDepartmentFormFields = {};
-    if (!cost) {
-      errors.cost = 'Costo requerido';
-    } else if (!/^\d+\.\d+$|^\d+$/.test(cost)) {
-      errors.cost = 'El costo sólo debe contener valores númericos';
-    }
-    if (!description) {
-      errors.description = 'Descripción requerida';
-    }
-    if (!neighborhood) {
-      errors.neighborhood = 'Colonia requerida';
-    }
-    if (!street) {
-      errors.street = 'Calle requerida';
-    }
-    return errors;
-  };
+  }) => CreateDepartmentFormFields,
+  handleCreateDepartment: (
+    departmentPayload:DepartmentPayload,
+  ) => Promise<void>,
+};
 
-  const onSubmit = (
+const CreateDepartmentForm = ({
+  error,
+  loading,
+  initialValues,
+  handleValidation,
+  handleCreateDepartment,
+}):JSX.Element => {
+  const handleOnSubmit = async (
     values: CreateDepartmentFormFields,
     formik: FormikHelpers<CreateDepartmentFormFields>,
-  ) => {
-    handleCreateDepartment(values, formik.resetForm);
+  ): Promise<void> => {
+    const payload:DepartmentPayload = {
+      description: values.description ?? '',
+      street: values.street ?? '',
+      neighborhood: values.neighborhood ?? '',
+      cost: values.cost ? parseFloat(values.cost) : 0,
+    };
+    await handleCreateDepartment(payload);
+    if (!error) {
+      formik.resetForm();
+    }
   };
 
   return (
@@ -56,7 +53,7 @@ const CreateDepartmentForm = ():JSX.Element => {
       validateOnChange={false}
       validateOnBlur={false}
       validate={handleValidation}
-      onSubmit={onSubmit}
+      onSubmit={handleOnSubmit}
     >
       {({
         handleChange, handleBlur, handleSubmit, errors, values,
@@ -93,8 +90,6 @@ const CreateDepartmentForm = ():JSX.Element => {
             numberOfLines={5}
             multiline
           />
-          { error
-            && <Error message={error} />}
           <Button
             loading={loading}
             loadingMessage="Registrando departamento..."

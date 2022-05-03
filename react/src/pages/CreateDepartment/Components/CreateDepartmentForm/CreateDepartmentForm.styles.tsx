@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const createDepartmentFormStyles = StyleSheet.create({
   button: {
-    marginVertical: 40,
+    marginVertical: 15,
   },
 } as const);
 

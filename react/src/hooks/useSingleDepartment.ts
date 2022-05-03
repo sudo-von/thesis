@@ -31,11 +31,11 @@ export const useSingleDepartment = (id:string) => {
       setError(null);
       setLoading(true);
       await updateDepartmentByID(departmentPayload);
+      setLoading(false);
       setSuccess('¡Has actualizado el departamento con éxito!');
       navigation.goBack();
     } catch (e) {
       setError((e as Error).message);
-    } finally {
       setLoading(false);
     }
   }, []);

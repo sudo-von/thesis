@@ -16,19 +16,20 @@ const useDepartmentCard = (id:string, email:string) => {
     navigation.navigate('UpdateDepartment', { id });
   };
 
-  const handleDelete = async (): Promise<void> => {
+  const handleDelete = async (handleDepartments: () => Promise<void>): Promise<void> => {
     try {
       setLoading(true);
       setError(null);
       await deleteDepartmentByID(id);
+      setLoading(false);
+      handleDepartments();
     } catch (e) {
       setError((e as Error).message);
-    } finally {
       setLoading(false);
     }
   };
 
-  const handleDeleteModal = () => {
+  const handleDeleteModal = (handleDepartments: () => Promise<void>) => {
     Alert.alert(
       '¿Quieres eliminar este departamento?',
       'Recuerda que esta acción no podrá ser revertida.',
@@ -38,7 +39,7 @@ const useDepartmentCard = (id:string, email:string) => {
         },
         {
           text: 'Eliminar',
-          onPress: handleDelete,
+          onPress: () => handleDelete(handleDepartments),
         },
       ],
     );
