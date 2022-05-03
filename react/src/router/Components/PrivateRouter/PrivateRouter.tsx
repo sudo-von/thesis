@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-unstable-nested-components */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useTheme } from 'react-native-paper';
 import { DrawerParamList, Route } from 'src/router/Router';
@@ -21,7 +21,11 @@ import UpdateContact from 'src/pages/UpdateContact/UpdateContact';
 import DrawerContent from 'src/router/Components/DrawerContent/DrawerContent';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import BackButton from 'src/router/Components/BackButton/BackButton';
+import { BATTERY_TASK, handleBatteryBackgroundTask, registerBackgroundTask } from 'src/services/background.service';
+import * as TaskManager from 'expo-task-manager';
 import privateRouterStyles from './PrivateRouter.styles';
+
+TaskManager.defineTask(BATTERY_TASK, handleBatteryBackgroundTask);
 
 const routes: Route[] = [
   {
@@ -185,6 +189,14 @@ const PrivateRouter = (): JSX.Element => {
   const { colors } = useTheme();
   const styles = privateRouterStyles(colors);
   const handleDrawerContent = (props) => <DrawerContent {...props} />;
+
+  useEffect(() => {
+    registerBackgroundTask(BATTERY_TASK, 5);
+    return () => {
+      TaskManager.unregisterAllTasksAsync();
+    };
+  }, []);
+
   return (
     <Drawer.Navigator screenOptions={styles} backBehavior="history" initialRouteName="Home" drawerContent={handleDrawerContent}>
       {
