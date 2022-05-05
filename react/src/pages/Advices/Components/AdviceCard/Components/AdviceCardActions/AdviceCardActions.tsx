@@ -23,7 +23,7 @@ const AdviceCardActions = ({
       { userID === adviceUserID
           && <FontAwesome onPress={handleUpdate} name="edit" size={24} color={theme.colors.primary} /> }
       { userID === adviceUserID
-          && <MaterialIcons onPress={() => handleDeleteModal(handleAdvices)} name="delete-outline" size={26} color={theme.colors.primary} /> }
+          && <MaterialIcons onPress={() => handleDeleteModal(handleAdvices)} name="delete-outline" size={24} color={theme.colors.primary} /> }
       <MaterialIcons name="search" size={24} color={theme.colors.primary} />
     </Card.Actions>
   );

@@ -31,12 +31,13 @@ const Advices = () => {
 
   return (
     <Container style={styles.container}>
-      <Shape backgroundColor={colors.primary} borderRadius={25} size={325} />
+      {/* <Shape backgroundColor={colors.primary} borderRadius={25} size={325} />
       <View style={styles.view}>
         <Image style={styles.image} source={image} />
         <Caption style={styles.caption}>¿Buscas una asesoría o te gustaría anunciar una?</Caption>
         <Small style={styles.small}>¡Estás en el lugar adecuado!</Small>
       </View>
+      */}
       { loading
         ? <View style={styles.loader}><Loader loadingMessage="Cargando asesorías..." /></View>
         : advices

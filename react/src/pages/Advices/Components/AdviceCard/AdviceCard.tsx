@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Card } from 'react-native-paper';
-import { Error, Loader } from 'src/components';
+import { Error, Hr, Loader } from 'src/components';
 import { Advice } from 'src/entities/advice';
 import useAdviceCard from 'src/hooks/useAdviceCard';
 import adviceCardStyles from './AdviceCard.styles';
@@ -31,9 +31,10 @@ const AdviceCard = ({
       <AdviceCardContent
         advice={advice}
       />
+      <Hr />
       { loading
         ? (
-          <View style={{ marginBottom: 20 }}>
+          <View style={adviceCardStyles.view}>
             <Loader size={20} showMessage={false} />
           </View>
         )
