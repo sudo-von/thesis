@@ -81,6 +81,7 @@ const routes: Route[] = [
         height: 0,
       },
       headerLeft: BackButton,
+      headerRight: () => AddButton('CreateAdivce'),
     },
   },
   {

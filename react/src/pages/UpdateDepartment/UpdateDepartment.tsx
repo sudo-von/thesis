@@ -58,7 +58,7 @@ const UpdateDepartment = () => {
         <Small>Modifica la información de tu departamento en cualquier momento.</Small>
       </View>
       { loading
-        ? <View style={updateDepartmentStyles.loader}><Loader loadingMessage="Cargando..." /></View>
+        ? <View style={updateDepartmentStyles.loader}><Loader loadingMessage="Cargando departamento..." /></View>
         : department && (
           <SafeAreaView>
             <ScrollView>

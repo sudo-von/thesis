@@ -21,5 +21,4 @@ export { default as SliderInput } from './SliderInput/SliderInput';
 export { default as Shape } from './Shape/Shape';
 export { default as Small } from './Small/Small';
 export { default as Success } from './Success/Success';
-export { default as Tabs } from './Tabs/Tabs';
 export { default as Timepicker } from './Timepicker/Timepicker';

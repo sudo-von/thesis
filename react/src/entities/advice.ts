@@ -17,6 +17,7 @@ type AdvicePayload = {
 };
 
 type UpdateAdvicePayload = {
+  id: string,
   subject: string,
   adviceDate: string,
   classroomId: string,

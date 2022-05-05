@@ -1,54 +1,90 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   View,
   SafeAreaView,
   ScrollView,
-  Alert,
 } from 'react-native';
-import { Bold, Small, Container, Loader } from 'src/components';
+import {
+  Bold,
+  Small,
+  Container,
+  Loader,
+  Success,
+  Error,
+} from 'src/components';
 import { Title } from 'react-native-paper';
-import { useRoute } from '@react-navigation/native';
-import { getAdviceByID } from 'src/services/advice.service';
-import { Advice } from 'src/entities/advice';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { DrawerParamList } from 'src/router/Router';
+import useSingleAdvice from 'src/hooks/useSingleAdvice';
+import moment from 'moment';
 import updateAdviceStyles from './UpdateAdvice.styles';
-import UpdateAdviceForm from './Components/UpdateAdviceForm/UpdateAdviceForm';
+import UpdateAdviceForm, { UpdateAdviceFormFields } from './Components/UpdateAdviceForm/UpdateAdviceForm';
 
 const UpdateAdvice = (): JSX.Element => {
-  const { params } = useRoute();
-  const [advice, setAdvice] = useState<Advice>();
-  const [loading, setLoading] = useState<boolean>(true);
+  const { params } = useRoute<RouteProp<DrawerParamList, 'UpdateAdvice'>>();
+  const { id } = params;
+  const {
+    loading,
+    error,
+    success,
+    advice,
+    handleUpdateAdvice,
+  } = useSingleAdvice(id);
 
-  useEffect(() => {
-    const searchAdviceByID = async () => {
-      try {
-        const response:Advice = await getAdviceByID(params.id);
-        setAdvice(response);
-      } catch (e) {
-        Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    searchAdviceByID();
-  }, []);
+  const initialValues:UpdateAdviceFormFields = {
+    subject: advice?.subject,
+    advice_date: moment(advice?.adviceDate).format('YYYY-MM-DD'),
+    advice_time: moment(advice?.adviceDate).format('HH:mm'),
+    classroom_id: advice?.classroom.id,
+  };
+
+  const handleValidation = ({
+    subject, advice_date, advice_time, classroom_id,
+  }:UpdateAdviceFormFields) => {
+    const errors:UpdateAdviceFormFields = {};
+    if (!subject) {
+      errors.subject = 'Materia requerida';
+    }
+    if (!advice_date) {
+      errors.advice_date = 'Fecha de la asesoría requerida';
+    }
+    if (!advice_time) {
+      errors.advice_time = 'Hora de la asesoría requerida';
+    }
+    if (!classroom_id) {
+      errors.classroom_id = 'Salón requerido';
+    }
+    return errors;
+  };
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <Container style={updateAdviceStyles.container}>
-          <View style={updateAdviceStyles.view}>
-            <Title><Bold>Actualiza tu asesoría{'\n'}en cualquier momento!</Bold></Title>
-            <Small>
-              Manten la información de tu asesoría actualizada
-              para que todos puedan acudir a ella.
-            </Small>
-          </View>
-          { loading
-            ? <Loader size={80} loadingMessage="Cargando asesoría" />
-            : <UpdateAdviceForm advice={advice} /> }
-        </Container>
-      </ScrollView>
-    </SafeAreaView>
+    <Container style={updateAdviceStyles.container}>
+      <View style={updateAdviceStyles.view}>
+        <Title><Bold>Actualiza tu asesoría{'\n'}en cualquier momento!</Bold></Title>
+        <Small>
+          Manten la información de tu asesoría actualizada
+          para que todos puedan acudir a ella.
+        </Small>
+      </View>
+      { loading
+        ? <View style={updateAdviceStyles.loader}><Loader loadingMessage="Cargando asesoría..." /></View>
+        : advice && (
+          <SafeAreaView>
+            <ScrollView>
+              <UpdateAdviceForm
+                loading={loading}
+                initialValues={initialValues}
+                handleValidation={handleValidation}
+                handleUpdateAdvice={handleUpdateAdvice}
+              />
+            </ScrollView>
+          </SafeAreaView>
+        )}
+      { error
+        && <Error message={error} /> }
+      { success
+        && <Success message={success} /> }
+    </Container>
   );
 };
 

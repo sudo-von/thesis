@@ -1,41 +1,54 @@
 import React from 'react';
+import { View } from 'react-native';
 import { Card } from 'react-native-paper';
+import { Error, Loader } from 'src/components';
 import { Advice } from 'src/entities/advice';
+import useAdviceCard from 'src/hooks/useAdviceCard';
 import adviceCardStyles from './AdviceCard.styles';
 import AdviceCardActions from './Components/AdviceCardActions/AdviceCardActions';
 import AdviceCardContent from './Components/AdviceCardContent/AdviceCardContent';
 
 type AdviceCardProps = {
-  advice: Advice,
-  setAdvices: React.Dispatch<React.SetStateAction<Advice[]>>,
   userID: string,
+  advice: Advice,
+  handleAdvices: () => Promise<void>,
 };
 
-const AdviceCard = ({ advice, userID, setAdvices }:AdviceCardProps) => {
+const AdviceCard = ({
+  advice,
+  userID,
+  handleAdvices,
+}:AdviceCardProps) => {
   const {
-    id,
-    adviceDate,
-    classroom,
-    subject,
-    studentsWillAttend,
-    user,
-  }:Advice = advice;
+    loading,
+    error,
+    handleEmail,
+    handleUpdate,
+    handleDeleteModal,
+  } = useAdviceCard(advice.id, advice.user.email);
   return (
     <Card style={adviceCardStyles.card}>
       <AdviceCardContent
-        adviceDate={adviceDate}
-        adviceUser={user}
-        classroom={classroom}
-        studentsNumber={studentsWillAttend.length}
-        subject={subject}
+        advice={advice}
       />
-      <AdviceCardActions
-        adviceID={id}
-        adviceUser={user}
-        userID={userID}
-        studentsWillAttend={studentsWillAttend}
-        setAdvices={setAdvices}
-      />
+      { loading
+        ? (
+          <View style={{ marginBottom: 20 }}>
+            <Loader size={20} showMessage={false} />
+          </View>
+        )
+        : (
+          <AdviceCardActions
+            adviceUserID={advice.user.id}
+            userID={userID}
+            handleEmail={handleEmail}
+            handleUpdate={handleUpdate}
+            handleDeleteModal={handleDeleteModal}
+            handleAdvices={handleAdvices}
+          />
+        )}
+      { error
+      && <Error message={error} /> }
     </Card>
   );
 };

@@ -17,7 +17,7 @@ import { Classroom } from 'src/entities/classroom';
 import { Option } from 'src/components/SelectInput/SelectInput';
 import updateAdviceFormStyles from './UpdateAdviceForm.styles';
 
-type UpdateAdviceFormFields = {
+export type UpdateAdviceFormFields = {
   subject?: string,
   advice_date?: string,
   advice_time?: string,
@@ -25,7 +25,15 @@ type UpdateAdviceFormFields = {
 };
 
 type UpdateAdviceFormProps = {
-  advice?: Advice,
+  loading: boolean,
+  initialValues: UpdateAdviceFormFields,
+  handleValidation: ({
+    subject,
+    advice_date,
+    advice_time,
+    classroom_id,
+  }:UpdateAdviceFormFields) => UpdateAdviceFormFields,
+  handleUpdateDepartment: (updateDepartmentPayload: UpdateDepartmentPayload) => Promise<void>
 };
 
 const UpdateAdviceForm = ({ advice }:UpdateAdviceFormProps): JSX.Element => {
@@ -49,31 +57,6 @@ const UpdateAdviceForm = ({ advice }:UpdateAdviceFormProps): JSX.Element => {
     searchUniversityByID();
   }, []);
 
-  const initialValues:UpdateAdviceFormFields = {
-    subject: advice?.subject,
-    advice_date: moment(advice?.adviceDate).format('YYYY-MM-DD'),
-    advice_time: moment(advice?.adviceDate).format('HH:mm'),
-    classroom_id: advice?.classroom.id,
-  };
-
-  const handleValidation = ({
-    subject, advice_date, advice_time, classroom_id,
-  }:UpdateAdviceFormFields) => {
-    const errors:UpdateAdviceFormFields = {};
-    if (!subject) {
-      errors.subject = 'Materia requerida';
-    }
-    if (!advice_date) {
-      errors.advice_date = 'Fecha de la asesoría requerida';
-    }
-    if (!advice_time) {
-      errors.advice_time = 'Hora de la asesoría requerida';
-    }
-    if (!classroom_id) {
-      errors.classroom_id = 'Salón requerido';
-    }
-    return errors;
-  };
 
   const onHandleSubmit = async (form:UpdateAdviceFormFields) => {
     try {

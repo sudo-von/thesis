@@ -1,148 +1,30 @@
 import React from 'react';
-import { Alert, Linking } from 'react-native';
-import { IconButton, Card } from 'react-native-paper';
-import { deleteAdviceByID, updateStudentsNumber } from 'src/services/advice.service';
-import { useNavigation } from '@react-navigation/native';
-import { TinyUser } from 'src/entities/user';
-import { Advice } from 'src/entities/advice';
+import { Card, useTheme } from 'react-native-paper';
+import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import adviceCardActionsStyles from './AdviceCardActions.styles';
 
 type AdviceCardActionsProps = {
-  studentsWillAttend: string[],
-  adviceID: string,
-  adviceUser: TinyUser,
+  adviceUserID: string,
   userID: string,
-  setAdvices: React.Dispatch<React.SetStateAction<Advice[]>>
-};
-
-type AdviceCardActionButtonProps = {
-  icon: string,
-  color: string,
-  onPress: () => void,
-  validateUser: boolean,
+  handleEmail: () => Promise<void>,
+  handleUpdate: () => void,
+  handleDeleteModal: (handleAdvices: () => Promise<void>) => void,
+  handleAdvices: () => Promise<void>,
 };
 
 const AdviceCardActions = ({
-  studentsWillAttend, adviceID, adviceUser, userID, setAdvices,
+  adviceUserID, userID, handleEmail, handleUpdate, handleDeleteModal, handleAdvices,
 }: AdviceCardActionsProps) => {
-  const navigation = useNavigation();
-
-  const attended = studentsWillAttend.includes(userID);
-  /* Updates the number of students that will go to the advice. */
-  const handleAssistance = async () => {
-    try {
-      await updateStudentsNumber(adviceID);
-      if (attended) {
-        setAdvices((advices) => advices.map((advice:Advice) => (advice.id === adviceID
-          ? {
-            ...advice,
-            studentsWillAttend: advice.studentsWillAttend.filter(
-              (studentID) => studentID !== userID,
-            ),
-          }
-          : advice)));
-      } else {
-        setAdvices((advices) => advices.map((advice:Advice) => (advice.id === adviceID
-          ? { ...advice, students_will_attend: [...advice.studentsWillAttend, userID] }
-          : advice
-        )));
-      }
-    } catch (e) {
-      Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
-    }
-  };
-
-  const handleEdit = () => {
-    navigation.navigate('UpdateAdvice', {
-      id: adviceID,
-    });
-  };
-
-  const handleDelete = () => {
-    Alert.alert(
-      '¿Quieres eliminar esta asesoría?',
-      'Tu asesoría puede ayudar mucho a otros estudiantes. Recuerda que esta acción no podrá ser revertida.',
-      [
-        {
-          text: 'Cancelar',
-        },
-        {
-          text: 'Eliminar asesoría',
-          onPress: async () => {
-            try {
-              await deleteAdviceByID(adviceID);
-              setAdvices((advices) => advices.filter((advice:Advice) => advice.id !== adviceID));
-            } catch (e) {
-              Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
-            }
-          },
-        },
-      ],
-    );
-  };
-
-  /* Open a new mail. */
-  const handleEmail = () => {
-    Linking.openURL(`mailto:${adviceUser.email}`);
-  };
-
-  const buttons:AdviceCardActionButtonProps[] = [
-    {
-      icon: 'thumb-up',
-      color: attended ? '#4FB1F8' : '#A7BBCA',
-      onPress: handleAssistance,
-      validateUser: false,
-    },
-    {
-      icon: 'email',
-      color: '#F8DD4F',
-      onPress: handleEmail,
-      validateUser: false,
-    },
-    {
-      icon: 'pencil',
-      color: '#F8B44F',
-      onPress: handleEdit,
-      validateUser: true,
-    },
-    {
-      icon: 'delete',
-      color: '#F84F4F',
-      onPress: handleDelete,
-      validateUser: true,
-    },
-  ];
-
+  const theme = useTheme();
   return (
-    <Card.Actions>
-      { buttons.map((button:AdviceCardActionButtonProps) => {
-        if (button.validateUser) {
-          if (userID === adviceUser.id) {
-            return (
-              <IconButton
-                key={`${userID}-${button.icon}`}
-                icon={button.icon}
-                color={button.color}
-                size={20}
-                onPress={button.onPress}
-                hasTVPreferredFocus
-                tvParallaxProperties
-              />
-            );
-          }
-        } else {
-          return (
-            <IconButton
-              key={`${userID}-${button.icon}`}
-              icon={button.icon}
-              color={button.color}
-              size={20}
-              onPress={button.onPress}
-              hasTVPreferredFocus
-              tvParallaxProperties
-            />
-          );
-        }
-      })}
+    <Card.Actions style={adviceCardActionsStyles.cardActions}>
+      { userID !== adviceUserID
+          && <MaterialCommunityIcons onPress={handleEmail} name="email-outline" size={24} color={theme.colors.primary} /> }
+      { userID === adviceUserID
+          && <FontAwesome onPress={handleUpdate} name="edit" size={24} color={theme.colors.primary} /> }
+      { userID === adviceUserID
+          && <MaterialIcons onPress={() => handleDeleteModal(handleAdvices)} name="delete-outline" size={26} color={theme.colors.primary} /> }
+      <MaterialIcons name="search" size={24} color={theme.colors.primary} />
     </Card.Actions>
   );
 };

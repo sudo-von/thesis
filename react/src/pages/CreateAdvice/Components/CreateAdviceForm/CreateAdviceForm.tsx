@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { View, Alert } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import {
   Formik, Field, FormikHelpers, FieldAttributes,
 } from 'formik';
-import { createAdvice } from 'src/services/advice.service';
-import { getUniversityByID } from 'src/services/university.service';
-import useUser from 'src/hooks/useUser';
 import {
   Input,
   SelectInput,
@@ -13,83 +10,65 @@ import {
   Timepicker,
   Button,
 } from 'src/components';
-import { Classroom } from 'src/entities/classroom';
+import { AdvicePayload } from 'src/entities/advice';
+import { University } from 'src/entities/university';
 import createAdviceFormStyles from './CreateAdviceForm.styles';
 
-type CreateAdviceFormFields = {
+export type CreateAdviceFormFields = {
   subject?: string,
   advice_date?: string,
   advice_time?: string,
   classroom_id?: string,
 };
 
-type ClassroomOption = {
+export type ClassroomOption = {
   label: string,
   value: string,
 };
 
-const CreateAdviceForm = () => {
-  const { user } = useUser();
-  const { universityId } = user;
+export type CreateAdviceFormProps = {
+  university: University,
+  error: string | null,
+  loading: boolean,
+  initialValues: CreateAdviceFormFields
+  handleValidation: ({
+    subject,
+    advice_date,
+    advice_time,
+    classroom_id,
+  }:CreateAdviceFormFields) => CreateAdviceFormFields,
+  handleCreateAdvice: (
+    advicePayload:AdvicePayload,
+  ) => Promise<void>,
+};
 
-  const [loading, setLoading] = useState(false);
-  const [classrooms, setClassrooms] = useState<ClassroomOption[]>([]);
-
-  useEffect(() => {
-    const searchUniversityByID = async () => {
-      try {
-        const university = await getUniversityByID(universityId);
-        setClassrooms(university.classrooms.map(
-          (classroom:Classroom) => ({ label: classroom.name, value: classroom.id }),
-        ));
-      } catch (e) {
-        Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
-      }
-    };
-    searchUniversityByID();
-  }, []);
-
-  const initialValues:CreateAdviceFormFields = {
-    subject: '',
-    advice_date: '',
-    advice_time: '',
-    classroom_id: '',
-  };
-
-  const handleValidation = ({
-    subject, advice_date, advice_time, classroom_id,
-  }:CreateAdviceFormFields) => {
-    const errors:CreateAdviceFormFields = {};
-    if (!subject) {
-      errors.subject = 'Materia requerida';
-    }
-    if (!advice_date) {
-      errors.advice_date = 'Fecha de la asesoría requerida';
-    }
-    if (!advice_time) {
-      errors.advice_time = 'Hora de la asesoría requerida';
-    }
-    if (!classroom_id) {
-      errors.classroom_id = 'Salón requerido';
-    }
-    return errors;
-  };
-
+const CreateAdviceForm = ({
+  error,
+  loading,
+  university,
+  initialValues,
+  handleValidation,
+  handleCreateAdvice,
+}: CreateAdviceFormProps):JSX.Element => {
   const onHandleSubmit = async (
     values: CreateAdviceFormFields,
     formik: FormikHelpers<CreateAdviceFormFields>,
-  ) => {
-    try {
-      setLoading(true);
-      await createAdvice({ ...values, advice_date: `${values.advice_date} ${values.advice_time}` });
+  ): Promise<void> => {
+    const payload:AdvicePayload = {
+      subject: values.subject ?? '',
+      adviceDate: `${values.advice_date} ${values.advice_time}` ?? '',
+      classroomId: values.classroom_id ?? '',
+    };
+    await handleCreateAdvice(payload);
+    if (!error) {
       formik.resetForm();
-      Alert.alert('¡Felicidades!', '¡Has registrado la asesoría con éxito!');
-    } catch (e) {
-      Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
-    } finally {
-      setLoading(false);
     }
   };
+
+  const classrooms: ClassroomOption[] = university.classrooms.map((c) => ({
+    label: c.name,
+    value: c.id,
+  }));
 
   return (
     <Formik

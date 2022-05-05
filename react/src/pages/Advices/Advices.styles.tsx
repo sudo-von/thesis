@@ -1,17 +1,31 @@
 import { StyleSheet } from 'react-native';
 
-const advicesStyles = (colors:ReactNativePaper.ThemeColors) => StyleSheet.create({
+const advicesStyles = (color:string) => StyleSheet.create({
   container: {
-    padding: 0,
-    justifyContent: 'center',
+    padding: 10,
   },
   view: {
-    backgroundColor: '#F2F2F2',
-    flex: 1,
-  },
-  bottomView: {
+    marginVertical: 20,
+    flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: colors.primary,
+  },
+  image: {
+    height: 150,
+    resizeMode: 'contain',
+  },
+  caption: {
+    marginTop: 20,
+    color,
+  },
+  small: {
+    textAlign: 'center',
+    color,
+  },
+  loader: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 } as const);
 

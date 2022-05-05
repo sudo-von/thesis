@@ -26,9 +26,9 @@ const deleteAdviceByID = async (adviceId:string) => {
   await destroy(`/advices/${adviceId}`);
 };
 
-const updateAdviceByID = async (adviceId:string, updateAdvicePayload:UpdateAdvicePayload)
+const updateAdviceByID = async (updateAdvicePayload:UpdateAdvicePayload)
 : Promise<void> => {
-  await patch(`/advices/${adviceId}`, updateAdvicePayload);
+  await patch(`/advices/${updateAdvicePayload.id}`, updateAdvicePayload);
 };
 
 const updateStudentsNumber = async (adviceId:string): Promise<void> => {

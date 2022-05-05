@@ -1,51 +1,46 @@
-import { useNavigation } from '@react-navigation/native';
-import { useState, useEffect } from 'react';
-import { Alert } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { useState, useCallback } from 'react';
 import { Advice } from 'src/entities/advice';
 import { getAdvices } from 'src/services/advice.service';
 
-const useAdvices = (userID:string) => {
-  const navigation = useNavigation();
+const useAdvices = () => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [advices, setAdvices] = useState<Advice[]>([]);
 
-  const attendedAdvices = advices.filter(
-    (advice) => advice.studentsWillAttend.some(
-      (studentID) => studentID === userID,
-    ),
-  );
+  const clearState = () => {
+    setLoading(false);
+    setAdvices([]);
+    setError(null);
+  };
 
-  const teachedAdvices = advices.filter(
-    (advice) => advice.user.id === userID,
-  );
-
-  const handleAdvices = async () => {
+  const handleAdvices = async (): Promise<void> => {
     try {
+      setError(null);
       setLoading(true);
-      const response:Advice[] = await getAdvices();
+      const response = await getAdvices();
       setAdvices(response);
     } catch (e) {
-      const error = e as Error;
-      Alert.alert('¡Ha ocurrido un error!', error.message);
+      setError((e as Error).message);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const willFocusSubscription = navigation.addListener('focus', () => {
+  useFocusEffect(
+    useCallback(() => {
       handleAdvices();
-    });
-    return willFocusSubscription;
-  }, []);
+      return clearState;
+    }, []),
+  );
 
   return {
+    error,
     loading,
     setLoading,
     advices,
     setAdvices,
-    attendedAdvices,
-    teachedAdvices,
+    handleAdvices,
   };
 };
 

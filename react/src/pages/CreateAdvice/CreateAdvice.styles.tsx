@@ -5,7 +5,13 @@ const createAdviceStyles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   view: {
-    marginVertical: 40,
+    marginVertical: 20,
+  },
+  loader: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 } as const);
 
