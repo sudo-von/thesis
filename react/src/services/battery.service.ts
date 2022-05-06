@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { BatteryPayload } from 'src/entities/battery';
 import { post } from 'src/helpers/protected-axios-helper';
 import * as Battery from 'expo-battery';

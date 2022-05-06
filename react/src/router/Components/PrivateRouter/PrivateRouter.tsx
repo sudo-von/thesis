@@ -194,7 +194,7 @@ const PrivateRouter = (): JSX.Element => {
   const handleDrawerContent = (props) => <DrawerContent {...props} />;
 
   useEffect(() => {
-    registerBackgroundTask(BATTERY_TASK, 5);
+    registerBackgroundTask(BATTERY_TASK, 300);
     return () => {
       TaskManager.unregisterAllTasksAsync();
     };
