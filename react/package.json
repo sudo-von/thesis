@@ -47,7 +47,8 @@
     "react-test-renderer": "^16.3.1",
     "expo-task-manager": "~9.2.2",
     "expo-background-fetch": "~9.2.2",
-    "expo-battery": "~5.0.0"
+    "expo-battery": "~5.0.0",
+    "expo-updates": "~0.8.2"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
