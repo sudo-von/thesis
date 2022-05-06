@@ -16,6 +16,10 @@ const useDepartmentCard = (id:string, email:string) => {
     navigation.navigate('UpdateDepartment', { id });
   };
 
+  const handleDetail = (): void => {
+    navigation.navigate('DepartmentDetail', { id });
+  };
+
   const handleDelete = async (handleDepartments: () => Promise<void>): Promise<void> => {
     try {
       setLoading(true);
@@ -49,6 +53,7 @@ const useDepartmentCard = (id:string, email:string) => {
     loading,
     error,
     handleEmail,
+    handleDetail,
     handleUpdate,
     handleDeleteModal,
   };

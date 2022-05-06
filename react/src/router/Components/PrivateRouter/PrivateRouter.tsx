@@ -11,6 +11,7 @@ import Advices from 'src/pages/Advices/Advices';
 import Departments from 'src/pages/Departments/Departments';
 import CreateDepartment from 'src/pages/CreateDepartment/CreateDepartment';
 import UpdateDepartment from 'src/pages/UpdateDepartment/UpdateDepartment';
+import DepartmentDetail from 'src/pages/DepartmentDetail/DepartmentDetail';
 import CreateAdvice from 'src/pages/CreateAdvice/CreateAdvice';
 import UpdateAdvice from 'src/pages/UpdateAdvice/UpdateAdvice';
 import Suggestion from 'src/pages/Suggestion/Suggestion';
@@ -134,6 +135,17 @@ const routes: Route[] = [
     component: UpdateDepartment,
     options: {
       title: 'Actualizar departamento',
+      drawerItemStyle: {
+        height: 0,
+      },
+      headerLeft: BackButton,
+    },
+  },
+  {
+    name: 'DepartmentDetail',
+    component: DepartmentDetail,
+    options: {
+      title: 'Detalle del departamento',
       drawerItemStyle: {
         height: 0,
       },

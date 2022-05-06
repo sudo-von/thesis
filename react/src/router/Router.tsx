@@ -21,6 +21,9 @@ export type DrawerParamList = {
   UpdateDepartment: {
     id: string,
   },
+  DepartmentDetail: {
+    id: string,
+  },
   CreateSuggestion: undefined,
   UpdateAccount: undefined,
   CreateContact: undefined,

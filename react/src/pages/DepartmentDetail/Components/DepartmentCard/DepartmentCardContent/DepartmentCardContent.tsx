@@ -3,7 +3,7 @@ import { Bold, Small } from 'src/components';
 import {
   Badge,
   Card,
-  Title,
+  Paragraph,
   useTheme,
 } from 'react-native-paper';
 import { Department } from 'src/entities/department';
@@ -22,11 +22,21 @@ const DepartmentCardContent = ({ department }:DepartmentCardContentProps):JSX.El
   return (
     <Card.Content style={styles.cardContent}>
       <Badge style={styles.badge}>{status}</Badge>
-      <Title style={styles.title}><Bold>{cost}</Bold></Title>
-      <Small style={styles.small}>{department.user.name}</Small>
-      <Small style={styles.small}>
-        <Bold>{department.neighborhood}</Bold> / <Bold>{department.street}</Bold>
-      </Small>
+      <Paragraph style={styles.title}><Bold>Costo mensual</Bold>:
+        {' '}<Small style={styles.description}>{cost}</Small>
+      </Paragraph>
+      <Paragraph style={styles.title}><Bold>Renta</Bold>:
+        {' '}<Small style={styles.description}>{department.user.name}</Small>
+      </Paragraph>
+      <Paragraph style={styles.title}><Bold>Calle</Bold>:
+        {' '}<Small style={styles.description}>{department.street}</Small>
+      </Paragraph>
+      <Paragraph style={styles.title}><Bold>Colonia</Bold>:
+        {' '}<Small style={styles.description}>{department.neighborhood}</Small>
+      </Paragraph>
+      <Paragraph style={styles.title}><Bold>Descripción</Bold>:
+        {' '}<Small style={styles.description}>{department.description}</Small>
+      </Paragraph>
     </Card.Content>
   );
 };

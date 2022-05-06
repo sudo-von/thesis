@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const adviceCardContentStyles = (colors:ReactNativePaper.ThemeColors) => StyleSheet.create({
   content: {
-    padding: 10,
+    padding: 8,
   },
   badge: {
     backgroundColor: colors.primary,

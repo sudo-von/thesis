@@ -5,12 +5,6 @@ const departmentCardStyles = StyleSheet.create({
     margin: 5,
     borderWidth: 0.3,
   },
-  view: {
-    height: 44,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 } as const);
 
 export default departmentCardStyles;

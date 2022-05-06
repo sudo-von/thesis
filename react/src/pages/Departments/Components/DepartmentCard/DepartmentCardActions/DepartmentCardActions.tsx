@@ -8,6 +8,7 @@ type DepartmentCardActionsProps = {
   userID: string,
   handleEmail: () => Promise<void>,
   handleUpdate: () => void,
+  handleDetail: () => void,
   handleDeleteModal: (handleDepartments: () => Promise<void>) => void,
   handleDepartments: () => Promise<void>,
 };
@@ -17,6 +18,7 @@ const DepartmentCardActions = ({
   userID,
   handleEmail,
   handleUpdate,
+  handleDetail,
   handleDeleteModal,
   handleDepartments,
 }:DepartmentCardActionsProps) => {
@@ -29,7 +31,7 @@ const DepartmentCardActions = ({
           && <FontAwesome onPress={handleUpdate} name="edit" size={24} color={theme.colors.primary} /> }
       { userID === departmentUserID
           && <MaterialIcons onPress={() => handleDeleteModal(handleDepartments)} name="delete-outline" size={26} color={theme.colors.primary} /> }
-      <MaterialIcons name="search" size={24} color={theme.colors.primary} />
+      <MaterialIcons name="search" onPress={handleDetail} size={24} color={theme.colors.primary} />
     </Card.Actions>
   );
 };
