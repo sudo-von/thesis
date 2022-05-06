@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Alert } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { Formik, Field, FieldAttributes } from 'formik';
 import {
   Input,
@@ -8,13 +8,9 @@ import {
   Timepicker,
   Button,
 } from 'src/components';
-import { updateAdviceByID } from 'src/services/advice.service';
-import { getUniversityByID } from 'src/services/university.service';
-import moment from 'moment';
-import useUser from 'src/hooks/useUser';
-import { Advice } from 'src/entities/advice';
-import { Classroom } from 'src/entities/classroom';
+import { Advice, UpdateAdvicePayload } from 'src/entities/advice';
 import { Option } from 'src/components/SelectInput/SelectInput';
+import { University } from 'src/entities/university';
 import updateAdviceFormStyles from './UpdateAdviceForm.styles';
 
 export type UpdateAdviceFormFields = {
@@ -25,7 +21,9 @@ export type UpdateAdviceFormFields = {
 };
 
 type UpdateAdviceFormProps = {
+  advice: Advice,
   loading: boolean,
+  university: University,
   initialValues: UpdateAdviceFormFields,
   handleValidation: ({
     subject,
@@ -33,42 +31,31 @@ type UpdateAdviceFormProps = {
     advice_time,
     classroom_id,
   }:UpdateAdviceFormFields) => UpdateAdviceFormFields,
-  handleUpdateDepartment: (updateDepartmentPayload: UpdateDepartmentPayload) => Promise<void>
+  handleUpdateAdvice: (updateAdvicePayload: UpdateAdvicePayload) => Promise<void>
 };
 
-const UpdateAdviceForm = ({ advice }:UpdateAdviceFormProps): JSX.Element => {
-  const { user } = useUser();
-  const { universityId } = user;
-
-  const [loading, setLoading] = useState<boolean>(false);
-  const [classrooms, setClassrooms] = useState<Option[]>([]);
-
-  useEffect(() => {
-    const searchUniversityByID = async () => {
-      try {
-        const university = await getUniversityByID(universityId);
-        setClassrooms(university.classrooms.map(
-          (classroom:Classroom) => ({ label: classroom.name, value: classroom.id }),
-        ));
-      } catch (e) {
-        Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
-      }
+const UpdateAdviceForm = ({
+  advice,
+  loading,
+  university,
+  initialValues,
+  handleValidation,
+  handleUpdateAdvice,
+}:UpdateAdviceFormProps): JSX.Element => {
+  const onHandleSubmit = async (values:UpdateAdviceFormFields) => {
+    const payload:UpdateAdvicePayload = {
+      id: advice.id ?? '',
+      subject: values.subject ?? '',
+      adviceDate: `${values.advice_date} ${values.advice_time}` ?? '',
+      classroomId: values.classroom_id ?? '',
     };
-    searchUniversityByID();
-  }, []);
-
-
-  const onHandleSubmit = async (form:UpdateAdviceFormFields) => {
-    try {
-      setLoading(true);
-      await updateAdviceByID(advice.id, { ...form, advice_date: `${form.advice_date} ${form.advice_time}` });
-      Alert.alert('¡Felicidades!', '¡Has actualizado la asesoría con éxito!');
-    } catch (e) {
-      Alert.alert('¡Ha ocurrido un error!', (e as Error).message);
-    } finally {
-      setLoading(false);
-    }
+    await handleUpdateAdvice(payload);
   };
+
+  const options:Option[] = university.classrooms.map((u) => ({
+    label: u.name,
+    value: u.id,
+  }));
 
   return (
     <Formik
@@ -113,7 +100,7 @@ const UpdateAdviceForm = ({ advice }:UpdateAdviceFormProps): JSX.Element => {
             {({ field, form }:FieldAttributes<any>) => (
               <SelectInput
                 label="Selecciona el salón"
-                data={classrooms}
+                data={options}
                 field={field}
                 form={form}
                 error={errors.classroom_id}

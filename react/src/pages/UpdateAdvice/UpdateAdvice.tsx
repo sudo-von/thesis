@@ -17,12 +17,16 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { DrawerParamList } from 'src/router/Router';
 import useSingleAdvice from 'src/hooks/useSingleAdvice';
 import moment from 'moment';
+import useUser from 'src/hooks/useUser';
+import useSingleUniversity from 'src/hooks/useSingleUniversity';
 import updateAdviceStyles from './UpdateAdvice.styles';
 import UpdateAdviceForm, { UpdateAdviceFormFields } from './Components/UpdateAdviceForm/UpdateAdviceForm';
 
 const UpdateAdvice = (): JSX.Element => {
   const { params } = useRoute<RouteProp<DrawerParamList, 'UpdateAdvice'>>();
+  const { user } = useUser();
   const { id } = params;
+
   const {
     loading,
     error,
@@ -30,6 +34,12 @@ const UpdateAdvice = (): JSX.Element => {
     advice,
     handleUpdateAdvice,
   } = useSingleAdvice(id);
+
+  const {
+    university,
+    loading: loadingError,
+    error: universityError,
+  } = useSingleUniversity(user.universityId);
 
   const initialValues:UpdateAdviceFormFields = {
     subject: advice?.subject,
@@ -66,12 +76,14 @@ const UpdateAdvice = (): JSX.Element => {
           para que todos puedan acudir a ella.
         </Small>
       </View>
-      { loading
+      { (loading || loadingError)
         ? <View style={updateAdviceStyles.loader}><Loader loadingMessage="Cargando asesoría..." /></View>
-        : advice && (
+        : (advice && university) && (
           <SafeAreaView>
             <ScrollView>
               <UpdateAdviceForm
+                advice={advice}
+                university={university}
                 loading={loading}
                 initialValues={initialValues}
                 handleValidation={handleValidation}
@@ -80,8 +92,10 @@ const UpdateAdvice = (): JSX.Element => {
             </ScrollView>
           </SafeAreaView>
         )}
-      { error
+      { (error)
         && <Error message={error} /> }
+      { (universityError)
+        && <Error message={universityError} /> }
       { success
         && <Success message={success} /> }
     </Container>

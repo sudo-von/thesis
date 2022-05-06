@@ -13,7 +13,7 @@ const getLocationPermissionStatus = async (): Promise<PermissionStatus> => {
 
 const getCurrentPosition = async (): Promise<LocationObject> => {
   try {
-    const location = await getCurrentPositionAsync({ accuracy: 1 });
+    const location = await getCurrentPositionAsync();
     return location;
   } catch (error) {
     throw new Error('Ha ocurrido un error al intentar acceder a tu ubicación.');

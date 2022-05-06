@@ -30,13 +30,13 @@ const useSingleAdvice = (id:string) => {
   };
 
   const handleUpdateAdvice = useCallback(async (
-    departmentPayload:UpdateAdvicePayload,
+    advicePayload:UpdateAdvicePayload,
   ): Promise<void> => {
     try {
       setSuccess(null);
       setError(null);
       setLoading(true);
-      await updateAdviceByID(departmentPayload);
+      await updateAdviceByID(advicePayload);
       setLoading(false);
       setSuccess('¡Has actualizado la asesoría con éxito!');
       navigation.goBack();

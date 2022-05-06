@@ -11,17 +11,19 @@ import AdviceCardContent from './Components/AdviceCardContent/AdviceCardContent'
 type AdviceCardProps = {
   userID: string,
   advice: Advice,
+  handleAssist: (adviceId:string, userId:string) => Promise<void>,
   handleAdvices: () => Promise<void>,
 };
 
 const AdviceCard = ({
   advice,
   userID,
+  handleAssist,
   handleAdvices,
 }:AdviceCardProps) => {
   const {
-    loading,
     error,
+    loading,
     handleEmail,
     handleUpdate,
     handleDeleteModal,
@@ -40,12 +42,15 @@ const AdviceCard = ({
         )
         : (
           <AdviceCardActions
+            adviceId={advice.id}
+            studentsWillAttend={advice.studentsWillAttend}
             adviceUserID={advice.user.id}
             userID={userID}
             handleEmail={handleEmail}
             handleUpdate={handleUpdate}
             handleDeleteModal={handleDeleteModal}
             handleAdvices={handleAdvices}
+            handleAssist={handleAssist}
           />
         )}
       { error
