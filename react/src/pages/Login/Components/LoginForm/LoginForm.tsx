@@ -18,8 +18,8 @@ export type LoginFormFields = {
 
 const LoginForm = ({ loading, handleLogin }: LoginFormProps) => {
   const initialValues:LoginFormFields = {
-    email: 'martinez-angel@uadec.edu.mx',
-    password: 'college-app',
+    email: '',
+    password: '',
   };
 
   const handleValidation = ({ email, password }:LoginFormFields): LoginFormFields => {

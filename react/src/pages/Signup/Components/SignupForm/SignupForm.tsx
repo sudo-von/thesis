@@ -41,12 +41,12 @@ const SignupForm = ({
   handleSignup,
 }: SignupFormProps) => {
   const initialValues:SignupFormFields = {
-    name: 'VoN',
-    birthDate: '1997-04-17',
-    email: 'martinez-angel@uadec.edu.mx',
-    registrationNumber: '16190775',
+    name: '',
+    birthDate: '',
+    email: '',
+    registrationNumber: '',
     universityId: '',
-    password: 'college-app',
+    password: '',
   };
 
   const handleValidation = (
